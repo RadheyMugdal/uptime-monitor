@@ -1,38 +1,5 @@
-// Example model schema from the Drizzle docs
-// https://orm.drizzle.team/docs/sql-schema-declaration
-
-import { sql } from "drizzle-orm";
-import { index, pgEnum, pgTableCreator } from "drizzle-orm/pg-core";
-import {
-	pgTable,
-	text,
-	timestamp,
-	boolean,
-	integer,
-} from "drizzle-orm/pg-core";
-
-/**
- * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
- * database instance for multiple projects.
- *
- * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
- */
-export const createTable = pgTableCreator((name) => `uptime-monitor_${name}`);
-
-export const posts = createTable(
-	"post",
-	(d) => ({
-		id: d.integer().primaryKey().generatedByDefaultAsIdentity(),
-		name: d.varchar({ length: 256 }),
-		createdAt: d
-			.timestamp({ withTimezone: true })
-			.default(sql`CURRENT_TIMESTAMP`)
-			.notNull(),
-		updatedAt: d.timestamp({ withTimezone: true }).$onUpdate(() => new Date()),
-	}),
-	(t) => [index("name_idx").on(t.name)],
-);
-
+import { pgEnum } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, boolean } from "drizzle-orm/pg-core";
 
 export const user = pgTable("user", {
 	id: text("id").primaryKey(),
@@ -94,34 +61,33 @@ export const verification = pgTable("verification", {
 	),
 });
 
-
 export const status = pgEnum("status", ["up", "down", "paused"]);
 export const methods = pgEnum("methods", ["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS"]);
 
 export const monitor = pgTable("monitor", (t) => ({
-    id: t.uuid("id").primaryKey().defaultRandom(),
-    name: t.text("name").notNull(),
-    url: t.text("url").notNull(),
+	id: t.uuid("id").primaryKey().defaultRandom(),
+	name: t.text("name").notNull(),
+	url: t.text("url").notNull(),
 
-    // Store frequency in minutes
-    frequencyMinutes: t.integer("frequency_minutes").notNull().default(5),
-    body: t.json("body").notNull().default({}),
-    status: status("status").notNull().default("up"),
-    method: methods("method").notNull().default("GET"),
-    headers: t.json("headers").notNull().default({}),
-    expectedStatus: t.integer("expected_status").notNull().default(200),
+	// Store frequency in minutes
+	frequencyMinutes: t.integer("frequency_minutes").notNull().default(5),
+	body: t.json("body").notNull().default({}),
+	status: status("status").notNull().default("paused"),
+	method: methods("method").notNull().default("GET"),
+	headers: t.json("headers").notNull().default({}),
+	expectedStatus: t.integer("expected_status").notNull().default(200),
 
-    userId: t.text("user_id").notNull().references(() => user.id, { onDelete: "cascade" }),
+	userId: t.text("user_id").notNull().references(() => user.id, { onDelete: "cascade" }),
 
-    createdAt: t.timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
-    updatedAt: t.timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+	createdAt: t.timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+	updatedAt: t.timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
 }));
 
 export const checkResult = pgTable("check_result", (t) => ({
-    id: t.uuid("id").primaryKey().defaultRandom(),
-    monitorId: t.uuid("monitor_id").notNull().references(() => monitor.id, { onDelete: "cascade" }),
-    status: status("status").notNull().default("up"),
-    responseMs: t.integer("response_ms").notNull(),
-    createdAt: t.timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
-    updatedAt: t.timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+	id: t.uuid("id").primaryKey().defaultRandom(),
+	monitorId: t.uuid("monitor_id").notNull().references(() => monitor.id, { onDelete: "cascade" }),
+	status: status("status").notNull().default("up"),
+	responseMs: t.integer("response_ms").notNull(),
+	createdAt: t.timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+	updatedAt: t.timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
 }));
