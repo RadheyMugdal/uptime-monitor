@@ -12,6 +12,11 @@ import Link from 'next/link'
 import { useParams, useSearchParams } from 'next/navigation'
 import React from 'react'
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from 'recharts'
+import PerformanceMatrix from '../components/performance-matrix'
+import LatencyMatrix from '../components/latency-matrix'
+import { DataTable } from '../components/incident/data-table'
+import { columns } from '../components/incident/columns'
+import RecentIncident from '../components/recent-incidents'
 
 const chartConfig = {
     responseMs: {
@@ -23,7 +28,7 @@ const MonitorView = () => {
     const id = useParams().id
     const [data] = api.monitor.getMonitorById.useSuspenseQuery({ id: id as string })
     const [checkResults] = api.monitor.getLatencyStatsById.useSuspenseQuery({ id: id as string })
-    const [performance] = api.monitor.getMonitorPerformance.useSuspenseQuery({ id: id as string })
+
     return (
         <>
             <header className="flex h-16 shrink-0 items-center gap-2">
@@ -69,29 +74,7 @@ const MonitorView = () => {
                         </span>
                     </div>
                 </div>
-                <div className=' grid gap-6 grid-cols-2'>
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Total incidents</CardTitle>
-                            <CardDescription>Incidents for the last 24 hours</CardDescription>
-                            <CardTitle>{performance.incidentsCount}</CardTitle>
-                        </CardHeader>
-                    </Card>
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Currently up for</CardTitle>
-                            <CardDescription> Date from last incidence</CardDescription>
-                            <CardTitle>
-                                {performance.lastIncident?.createdAt
-                                    ? formatDistanceToNow(new Date(performance.lastIncident.createdAt), { addSuffix: true })
-                                    : "No incidents yet"}
-                            </CardTitle>
-
-                        </CardHeader>
-                    </Card>
-
-
-                </div>
+                <PerformanceMatrix />
 
                 <Card className=' max-h-[500px]'>
                     <CardHeader>
@@ -140,34 +123,8 @@ const MonitorView = () => {
                         </ChartContainer>
                     </CardContent>
                 </Card>
-                <div className=' grid gap-6 grid-cols-4'>
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Average Response time</CardTitle>
-                            <CardDescription> {Math.ceil(checkResults.averageResponseTime || 0)} Ms</CardDescription>
-                        </CardHeader>
-                    </Card>
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Maximum Response time</CardTitle>
-                            <CardDescription> {checkResults.maxResponseTime} Ms</CardDescription>
-                        </CardHeader>
-                    </Card>
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Minimum Response time</CardTitle>
-                            <CardDescription> {checkResults.minResponseTime} Ms</CardDescription>
-                        </CardHeader>
-                    </Card>
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Last Response time</CardTitle>
-                            <CardDescription> {checkResults.lastCheckResultResponseTime} Ms</CardDescription>
-                        </CardHeader>
-                    </Card>
-
-                </div>
-
+                <LatencyMatrix />
+                <RecentIncident />
             </div>
         </>
     )

@@ -91,3 +91,21 @@ export const checkResult = pgTable("check_result", (t) => ({
 	createdAt: t.timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 	updatedAt: t.timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
 }));
+
+
+export const incident = pgTable("incident", (t) => ({
+	id: t.uuid("id").primaryKey().defaultRandom(),
+	monitorId: t.uuid("monitor_id").notNull().references(() => monitor.id, { onDelete: "cascade" }),
+
+	// status during incident (usually "down")
+	status: status("status").notNull().default("down"),
+
+	startAt: t.timestamp("start_at", { withTimezone: true }).notNull().defaultNow(),
+	endAt: t.timestamp("end_at", { withTimezone: true }), // null if ongoing
+
+	durationMs: t.integer("duration_ms"), // can be computed, optional
+	errorMessage: t.text("error_message"), // optional: HTTP 500, timeout, etc.
+
+	createdAt: t.timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+	updatedAt: t.timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+}));

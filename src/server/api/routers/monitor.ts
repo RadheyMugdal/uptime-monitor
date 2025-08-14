@@ -1,7 +1,7 @@
 import z from "zod"
 import { createTRPCRouter, protectedProcedure } from "../trpc"
 import { db } from "@/server/db"
-import { checkResult, monitor } from "@/server/db/schema"
+import { checkResult, incident, monitor } from "@/server/db/schema"
 import { and, count, desc, eq, gt, like, sql } from "drizzle-orm"
 import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } from "@/modules/monitors/constants"
 import { monitorQueue } from "@/lib/queue"
@@ -155,12 +155,12 @@ export const monitorRouter = createTRPCRouter({
     })).query(async ({ ctx, input }) => {
         const cutoffTime = new Date(Date.now() - 24 * 60 * 60 * 1000)
         const [incidentsCount] = await db.select({
-            count: count(checkResult.id)
-        }).from(checkResult).where(and(eq(checkResult.monitorId, input.id), gt(checkResult.createdAt, cutoffTime), eq(checkResult.status, 'down')))
+            count: count(incident.id)
+        }).from(incident).where(and(eq(incident.monitorId, input.id), gt(incident.createdAt, cutoffTime)))
 
         const [lastIncident] = await db.select({
-            createdAt: checkResult.createdAt,
-        }).from(checkResult).where(eq(checkResult.monitorId, input.id)).orderBy(desc(checkResult.createdAt)).limit(1)
+            createdAt: incident.createdAt,
+        }).from(incident).where(eq(incident.monitorId, input.id)).orderBy(desc(incident.createdAt)).limit(1)
 
         return {
             incidentsCount: incidentsCount?.count || 0,
@@ -170,13 +170,7 @@ export const monitorRouter = createTRPCRouter({
     getLastFiveIncidents: protectedProcedure.input(z.object({
         id: z.string()
     })).query(async ({ ctx, input }) => {
-        const incidents = await db.select({
-            createdAt: checkResult.createdAt,
-            status: checkResult.status,
-            monitorId: checkResult.monitorId,
-            responseMs: checkResult.responseMs,
-        }).from(checkResult).where(eq(checkResult.monitorId, input.id)).orderBy(desc(checkResult.createdAt)).limit(5)
-
+        const incidents = await db.select().from(incident).where(eq(incident.monitorId, input.id)).orderBy(desc(incident.createdAt)).limit(5)
         return {
             incidents
         }
