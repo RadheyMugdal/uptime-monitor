@@ -1,21 +1,16 @@
-"use client"
+"use client";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from '@/components/ui/breadcrumb'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from '@/components/ui/chart'
 import { Separator } from '@/components/ui/separator'
 import { SidebarTrigger } from '@/components/ui/sidebar'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { cn } from '@/lib/utils'
 import { api } from '@/trpc/react'
-import { formatDistanceToNow } from 'date-fns'
 import Link from 'next/link'
-import { useParams, useSearchParams } from 'next/navigation'
-import React from 'react'
+import { useParams } from 'next/navigation';
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from 'recharts'
 import PerformanceMatrix from '../components/performance-matrix'
 import LatencyMatrix from '../components/latency-matrix'
-import { DataTable } from '../components/incident/data-table'
-import { columns } from '../components/incident/columns'
 import RecentIncident from '../components/recent-incidents'
 
 const chartConfig = {
@@ -57,8 +52,16 @@ const MonitorView = () => {
             </header>
             <div className="flex  flex-1 flex-col gap-4 p-4 pt-0">
                 <div className='flex gap-4 items-center'>
-                    <div className='size-10  bg-green-500 rounded-full relative'>
-                        <div className='  absolute inset-1 animate-ping bg-green-500 rounded-full'>
+                    <div className={cn('size-10  rounded-full relative',
+                        data.monitor?.status === 'up' && 'bg-green-500',
+                        data.monitor?.status === 'down' && 'bg-red-500',
+                        data.monitor?.status === 'paused' && 'bg-gray-500',
+                    )}>
+                        <div className={cn('  absolute inset-1 animate-ping rounded-full',
+                            data.monitor?.status === 'up' && 'bg-green-500',
+                            data.monitor?.status === 'down' && 'bg-red-500',
+                            data.monitor?.status === 'paused' && 'bg-gray-500',
+                        )}>
                         </div>
                     </div>
                     <div>

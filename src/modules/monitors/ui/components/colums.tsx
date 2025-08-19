@@ -6,6 +6,7 @@ import type { ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown, MoreHorizontal, SquareArrowOutUpRight, Trash2 } from "lucide-react"
 import type { Monitor } from "../../schema"
 import { cn } from "@/lib/utils"
+import Link from "next/link"
 
 
 export const columns: ColumnDef<Monitor>[] = [
@@ -21,10 +22,12 @@ export const columns: ColumnDef<Monitor>[] = [
     },
     cell: ({ row }) => {
       return (
-        <div className="flex gap-1 flex-col">
-          <p className="text-sm font-semibold">{row.getValue("name")}</p>
-          <span className="text-xs   truncate">{row.original.url}</span>
-        </div>
+        <Link href={`/dashboard/monitors/${row.original.id}`} className=" hover:underline">
+          <div className="flex gap-1 flex-col ">
+            <p className="text-sm font-semibold">{row.getValue("name")}</p>
+            <span className="text-xs   truncate">{row.original.url}</span>
+          </div>
+        </Link>
       )
     }
   },

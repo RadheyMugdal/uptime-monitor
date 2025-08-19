@@ -1,5 +1,6 @@
 import { createCallerFactory, createTRPCRouter } from "@/server/api/trpc";
 import { monitorRouter } from "./routers/monitor";
+import { incidentRouter } from "./routers/incident";
 
 /**
  * This is the primary router for your server.
@@ -7,7 +8,8 @@ import { monitorRouter } from "./routers/monitor";
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
-	monitor:monitorRouter
+	monitor: monitorRouter,
+	incident: incidentRouter
 });
 
 // export type definition of API

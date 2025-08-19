@@ -46,7 +46,7 @@ const MonitorsView = () => {
                     <Breadcrumb>
                         <BreadcrumbList>
                             <BreadcrumbItem className="hidden md:block">
-                                <BreadcrumbLink href="#">
+                                <BreadcrumbLink href="/dashboard/monitors">
                                     Monitors
                                 </BreadcrumbLink>
                             </BreadcrumbItem>

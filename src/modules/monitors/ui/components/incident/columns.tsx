@@ -71,7 +71,7 @@ export const columns: ColumnDef<Incident>[] = [
         cell: ({ row }) => {
             return (
                 <div >
-                    {row.original.status === 'down' ? "✅" : "❌"}
+                    {row.original.status === 'up' ? "✅" : "❌"}
                 </div>
             )
         }

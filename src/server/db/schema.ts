@@ -96,7 +96,7 @@ export const checkResult = pgTable("check_result", (t) => ({
 export const incident = pgTable("incident", (t) => ({
 	id: t.uuid("id").primaryKey().defaultRandom(),
 	monitorId: t.uuid("monitor_id").notNull().references(() => monitor.id, { onDelete: "cascade" }),
-
+	userId: t.text("user_id").notNull().references(() => user.id, { onDelete: "cascade" }),
 	// status during incident (usually "down")
 	status: status("status").notNull().default("down"),
 
