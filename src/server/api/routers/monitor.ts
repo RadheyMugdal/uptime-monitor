@@ -1,8 +1,11 @@
 import z from "zod"
 import { createTRPCRouter, protectedProcedure } from "../trpc"
 import { db } from "@/server/db"
-import { monitor } from "@/server/db/schema"
-import { and, count, eq, like } from "drizzle-orm"
+import { checkResult, incident, monitor } from "@/server/db/schema"
+import { and, count, desc, eq, gt, like, sql } from "drizzle-orm"
+import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } from "@/modules/monitors/constants"
+import { monitorQueue } from "@/lib/queue"
+import { TRPCError } from "@trpc/server"
 
 
 export const monitorRouter = createTRPCRouter({
@@ -28,16 +31,22 @@ export const monitorRouter = createTRPCRouter({
             userId: ctx.user.id
         }).returning({ id: monitor.id, frequencyMinutes: monitor.frequencyMinutes })
 
-        // await inngest.send({
-        //     name: `check-monitor-${createdMonitor.frequencyMinutes}-minutes`,
-        //     data: {
-        //         monitorId: createdMonitor.id
-        //     }
-        // })
-
-        return {
-            success: true
+        if (!createdMonitor) {
+            throw new Error("Failed to create monitor.");
         }
+
+        await monitorQueue.add(
+            'check-monitor',
+            { monitorId: createdMonitor.id },
+            {
+                jobId: `monitor-${createdMonitor.id}`,
+                repeat: { every: createdMonitor.frequencyMinutes * 60 * 1000 },
+                removeOnFail: true,
+                removeOnComplete: true
+            }
+        )
+
+        return;
 
     }),
     getAll: protectedProcedure.input(z.object({
@@ -51,13 +60,145 @@ export const monitorRouter = createTRPCRouter({
             url: monitor.url,
             frequencyMinutes: monitor.frequencyMinutes,
             status: monitor.status,
-        }).from(monitor).where(and(eq(monitor.userId, ctx.user.id), like(monitor.name, "%" + input.search + "%")))
+        }).from(monitor).where(and(eq(monitor.userId, ctx.user.id), like(monitor.name, "%" + input.search + "%"))).limit(DEFAULT_PAGE_SIZE).offset(input.page * DEFAULT_PAGE)
 
         const [rowCount] = await db.select({ count: count(monitor.id) }).from(monitor).where(eq(monitor.userId, ctx.user.id))
         return {
             items: monitors,
-            totalPages: Math.ceil(rowCount?.count  || 0/ 10)
+            totalPages: Math.ceil((rowCount?.count || 0) / 10)
         }
 
-    })
+    }),
+    getMonitorsStatus: protectedProcedure.query(async ({ ctx }) => {
+        const fill = {
+            up: "green",
+            down: "red",
+            paused: "yellow",
+            unknown: "gray"
+        }
+        const statusDataRaw = await db.select({
+            status: monitor.status,
+            count: count(monitor.id)
+        }).from(monitor).where(eq(monitor.userId, ctx.user.id)).groupBy(monitor.status)
+
+        const statusData = statusDataRaw.map(item => ({
+            ...item,
+            fill: fill[item.status as keyof typeof fill]
+        }))
+
+        const cuttOffDate = new Date(Date.now() - 24 * 60 * 60 * 1000)
+        const [last24HoursData] = await db
+            .select({
+                upMonitors: sql<number>`count(*) filter (where ${monitor.status} = 'up')`,
+                downMonitors: sql<number>`count(*) filter (where ${monitor.status} = 'down')`,
+                pausedMonitors: sql<number>`count(*) filter (where ${monitor.status} = 'paused')`,
+                totalMonitors: count()
+            })
+            .from(monitor)
+            .where(and(eq(monitor.userId, ctx.user.id), gt(monitor.createdAt, cuttOffDate)));
+
+        return {
+            statusData,
+            last24HoursData
+        }
+    }),
+    getMonitorById: protectedProcedure.input(z.object({
+        id: z.string()
+    })).query(async ({ ctx, input }) => {
+        const [existingMonitor] = await db.select({
+            id: monitor.id,
+            name: monitor.name,
+            url: monitor.url,
+            frequencyMinutes: monitor.frequencyMinutes,
+            status: monitor.status,
+        }).from(monitor).where(eq(monitor.id, input.id)).limit(1)
+
+        return {
+            monitor: existingMonitor
+        }
+    }),
+    getLatencyStatsById: protectedProcedure.input(z.object({
+        id: z.string()
+    })).query(async ({ ctx, input }) => {
+        const cuttOffDate = new Date(Date.now() - 24 * 60 * 60 * 1000)
+        const data = await db.select({
+            createdAt: checkResult.createdAt,
+            responseMs: checkResult.responseMs,
+        }).from(checkResult).where(and(eq(checkResult.monitorId, input.id), gt(checkResult.createdAt, cuttOffDate)))
+
+        const [lastCheckResult] = await db.select({
+            responseMs: checkResult.responseMs
+        }).from(checkResult).where(eq(checkResult.monitorId, input.id)).orderBy(desc(checkResult.createdAt)).limit(1)
+
+        const [averageResponseTime] = await db.select({
+            avg: sql<number>`avg(${checkResult.responseMs})`
+        }).from(checkResult).where(eq(checkResult.monitorId, input.id))
+
+        const [minResponseTime] = await db.select({
+            min: sql<number>`min(${checkResult.responseMs})`
+        }).from(checkResult).where(eq(checkResult.monitorId, input.id))
+
+        const [maxResponseTime] = await db.select({
+            max: sql<number>`max(${checkResult.responseMs})`
+        }).from(checkResult).where(eq(checkResult.monitorId, input.id))
+
+        return {
+            checkResults: data,
+            lastCheckResultResponseTime: lastCheckResult?.responseMs,
+            averageResponseTime: averageResponseTime?.avg,
+            minResponseTime: minResponseTime?.min,
+            maxResponseTime: maxResponseTime?.max
+
+        }
+    }),
+
+    getMonitorPerformance: protectedProcedure.input(z.object({
+        id: z.string()
+    })).query(async ({ ctx, input }) => {
+        const cutoffTime = new Date(Date.now() - 24 * 60 * 60 * 1000)
+        const [incidentsCount] = await db.select({
+            count: count(incident.id)
+        }).from(incident).where(and(eq(incident.monitorId, input.id), gt(incident.createdAt, cutoffTime)))
+
+        const [lastIncident] = await db.select({
+            createdAt: incident.createdAt,
+        }).from(incident).where(eq(incident.monitorId, input.id)).orderBy(desc(incident.createdAt)).limit(1)
+
+        return {
+            incidentsCount: incidentsCount?.count || 0,
+            lastIncident
+        }
+    }),
+    getLastFiveIncidents: protectedProcedure.input(z.object({
+        id: z.string()
+    })).query(async ({ ctx, input }) => {
+        const incidents = await db.select().from(incident).where(eq(incident.monitorId, input.id)).orderBy(desc(incident.createdAt)).limit(5)
+        return {
+            incidents
+        }
+    }),
+    pauseMonitor: protectedProcedure.input(z.object({
+        id: z.string()
+    })).mutation(async ({ ctx, input }) => {
+        await db.update(monitor).set({ status: "paused" }).where(eq(monitor.id, input.id))
+        await monitorQueue.remove(`monitor-${input.id}`)
+        return true
+    }),
+    resumeMonitor: protectedProcedure.input(z.object({
+        id: z.string()
+    })).mutation(async ({ ctx, input }) => {
+        const [data] = await db.update(monitor).set({ status: "up" }).where(eq(monitor.id, input.id)).returning()
+        if (!data) throw new TRPCError({ code: 'NOT_FOUND', message: 'Monitor not found' })
+        await monitorQueue.add(
+            'check-monitor',
+            { monitorId: input.id },
+            {
+                jobId: `monitor-${input.id}`,
+                repeat: { every: data.frequencyMinutes * 60 * 1000 },
+                removeOnFail: true,
+                removeOnComplete: true
+            }
+        )
+        return true
+    }),
 })

@@ -5,6 +5,9 @@ import { Geist } from "next/font/google";
 
 import { TRPCReactProvider } from "@/trpc/react";
 import { ThemeProvider } from "@/components/theme-provider";
+import { NuqsAdapter } from 'nuqs/adapters/next/app'
+import { Toaster } from "sonner";
+
 
 export const metadata: Metadata = {
 	title: "Create T3 App",
@@ -23,14 +26,17 @@ export default function RootLayout({
 	return (
 		<html lang="en" className={`${geist.variable}`} suppressHydrationWarning>
 			<body>
-				<ThemeProvider
-					attribute="class"
-					defaultTheme="system"
-					enableSystem
-					disableTransitionOnChange
-				>
-					<TRPCReactProvider>{children}</TRPCReactProvider>
-				</ThemeProvider>
+				<NuqsAdapter>
+					<ThemeProvider
+						attribute="class"
+						defaultTheme="system"
+						enableSystem
+						disableTransitionOnChange
+					>
+						<TRPCReactProvider>{children}</TRPCReactProvider>
+						<Toaster />
+					</ThemeProvider>
+				</NuqsAdapter>
 			</body>
 		</html>
 	);
