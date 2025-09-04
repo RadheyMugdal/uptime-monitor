@@ -111,8 +111,14 @@ export const monitorRouter = createTRPCRouter({
             url: monitor.url,
             frequencyMinutes: monitor.frequencyMinutes,
             status: monitor.status,
+            expectedStatus: monitor.expectedStatus,
+            method: monitor.method,
+            headers: monitor.headers,
+            body: monitor.body,
         }).from(monitor).where(eq(monitor.id, input.id)).limit(1)
-
+        if (!existingMonitor) {
+            throw new TRPCError({ code: 'NOT_FOUND', message: 'Monitor not found' })
+        }
         return {
             monitor: existingMonitor
         }
@@ -199,6 +205,36 @@ export const monitorRouter = createTRPCRouter({
                 removeOnComplete: true
             }
         )
+        return true
+    }),
+    updateMonitor: protectedProcedure.input(z.object({
+        id: z.string(),
+        name: z.string().optional(),
+        url: z.string().optional(),
+        frequencyMinutes: z.number().optional(),
+        method: z.enum(["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS"]).optional(),
+        expectedStatus: z.number().optional(),
+        body: z.string().optional(),
+        headers: z.json().optional(),
+    })).mutation(async ({ ctx, input }) => {
+        const [data] = await db.update(monitor).set({
+            name: input.name,
+            url: input.url,
+            frequencyMinutes: input.frequencyMinutes,
+            method: input.method,
+            expectedStatus: input.expectedStatus,
+            body: input.body,
+            headers: input.headers
+        })
+            .where(eq(monitor.id, input.id)).returning()
+        if (!data) throw new TRPCError({ code: 'NOT_FOUND', message: 'Monitor not found' })
+        await monitorQueue.remove(`monitor-${input.id}`)
+    }),
+    deleteMonitor: protectedProcedure.input(z.object({
+        id: z.string()
+    })).mutation(async ({ ctx, input }) => {
+        await db.delete(monitor).where(eq(monitor.id, input.id)).returning()
+        await monitorQueue.remove(`monitor-${input.id}`)
         return true
     }),
 })

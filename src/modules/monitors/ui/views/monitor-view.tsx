@@ -3,6 +3,7 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbS
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from '@/components/ui/chart'
 import { Separator } from '@/components/ui/separator'
+import { match } from 'ts-pattern';
 import { SidebarTrigger } from '@/components/ui/sidebar'
 import { cn } from '@/lib/utils'
 import { api } from '@/trpc/react'
@@ -13,10 +14,12 @@ import PerformanceMatrix from '../components/performance-matrix'
 import LatencyMatrix from '../components/latency-matrix'
 import RecentIncident from '../components/recent-incidents'
 import { Button } from '@/components/ui/button';
-import { Cog, Pause, Play } from 'lucide-react';
+import { Cog, Monitor, Pause, Play, RefreshCw } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { toast } from 'sonner';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useState } from 'react';
+import MonitorSettingForm from '../components/monitor-setting-form';
 
 const chartConfig = {
     responseMs: {
@@ -31,6 +34,67 @@ const MonitorView = () => {
     const [checkResults] = api.monitor.getLatencyStatsById.useSuspenseQuery({ id: id as string })
     const pauseMonitor = api.monitor.pauseMonitor.useMutation()
     const resumeMonitor = api.monitor.resumeMonitor.useMutation()
+    const [currentTab, setCurrentTab] = useState<"performance" | "setting">("performance")
+
+    const tabsContent = match(currentTab).with("performance", () => (
+        <>
+            <PerformanceMatrix />
+            <Card className=' max-h-[500px]'>
+                <CardHeader>
+                    <CardTitle>Response time</CardTitle>
+                    <CardDescription>Average response time for the last 24 hours</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <ChartContainer className=' max-h-[400px] w-full' config={chartConfig}>
+                        <LineChart data={checkResults.checkResults} >
+                            <CartesianGrid vertical={false} />
+                            <XAxis
+                                dataKey="createdAt"
+                                tickLine={false}
+                                axisLine={false}
+                                tickMargin={0}
+                                tickFormatter={(unixtime) => (
+                                    new Date(unixtime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                                )}
+                            />
+                            <YAxis
+                                dataKey="responseMs"
+                                tickLine={false}
+                                domain={['dataMin - 100', 'dataMax + 100']}
+                                tickCount={6}
+                                axisLine={false}
+                                tickMargin={8}
+                                label={{
+                                    value: "Response Time (ms)",
+                                    angle: -90,
+                                    position: 'insideLeft',
+                                    style: { textAnchor: 'middle' }
+                                }}
+                            />
+                            <ChartTooltip
+                                cursor={false}
+                                content={<ChartTooltipContent hideLabel />}
+                            />
+                            <Line
+                                dataKey="responseMs"
+                                type="natural"
+                                stroke="green"
+                                strokeWidth={2}
+                                dot={false}
+                            />
+                        </LineChart>
+                    </ChartContainer>
+                </CardContent>
+            </Card>
+            <LatencyMatrix />
+            <RecentIncident />
+        </>
+    ))
+        .with("setting", () => (
+            <>
+                <MonitorSettingForm monitor={data.monitor!} />
+            </>
+        )).exhaustive()
 
     const handlePauseMonitor = async () => {
         try {
@@ -121,78 +185,50 @@ const MonitorView = () => {
                             </span>
                         </div>
                     </div>
-                    <Tooltip>
-                        <TooltipTrigger asChild>
-                            <Button variant={"ghost"} size={"icon"}
-                                onClick={() => {
-                                    data.monitor?.status === "paused" ? handleResumeMonitor() : handlePauseMonitor()
-                                }}
-                                disabled={pauseMonitor.isPending || resumeMonitor.isPending}
-                            >
+                    <div>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
                                 {
-                                    data.monitor?.status === "paused" ? <Play /> : <Pause />
+                                    currentTab === "setting" ? (
+                                        <Button variant={"ghost"} size={"icon"} onClick={() => setCurrentTab("performance")}>
+                                            <Monitor className="w-4 h-4" />
+                                        </Button>
+                                    ) : (
+                                        <Button variant={"ghost"} size={"icon"} onClick={() => setCurrentTab("setting")}>
+                                            <Cog className="w-4 h-4" />
+                                        </Button>
+                                    )
                                 }
-                            </Button>
-                        </TooltipTrigger>
-                        <TooltipContent side="bottom">
-                            {
-                                data.monitor?.status === "paused" ? "Resume Monitor" : "Pause Monitor"
-                            }
-                        </TooltipContent>
-                    </Tooltip>
+                            </TooltipTrigger>
+                            <TooltipContent side="bottom">
+                                {
+                                    currentTab === "setting" ? "Performance View" : "Monitor Settings"
+                                }
+                            </TooltipContent>
+                        </Tooltip>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <Button variant={"ghost"} size={"icon"}
+                                    onClick={() => {
+                                        data.monitor?.status === "paused" ? handleResumeMonitor() : handlePauseMonitor()
+                                    }}
+                                    disabled={pauseMonitor.isPending || resumeMonitor.isPending}
+                                >
+                                    {
+                                        data.monitor?.status === "paused" ? <Play /> : <Pause />
+                                    }
+                                </Button>
+                            </TooltipTrigger>
+                            <TooltipContent side="bottom">
+                                {
+                                    data.monitor?.status === "paused" ? "Resume Monitor" : "Pause Monitor"
+                                }
+                            </TooltipContent>
+                        </Tooltip>
+                    </div>
                 </div>
 
-                <PerformanceMatrix />
-
-                <Card className=' max-h-[500px]'>
-                    <CardHeader>
-                        <CardTitle>Response time</CardTitle>
-                        <CardDescription>Average response time for the last 24 hours</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <ChartContainer className=' max-h-[400px] w-full' config={chartConfig}>
-                            <LineChart data={checkResults.checkResults} >
-                                <CartesianGrid vertical={false} />
-                                <XAxis
-                                    dataKey="createdAt"
-                                    tickLine={false}
-                                    axisLine={false}
-                                    tickMargin={0}
-                                    tickFormatter={(unixtime) => (
-                                        new Date(unixtime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-                                    )}
-                                />
-                                <YAxis
-                                    dataKey="responseMs"
-                                    tickLine={false}
-                                    domain={['dataMin - 100', 'dataMax + 100']}
-                                    tickCount={6}
-                                    axisLine={false}
-                                    tickMargin={8}
-                                    label={{
-                                        value: "Response Time (ms)",
-                                        angle: -90,
-                                        position: 'insideLeft',
-                                        style: { textAnchor: 'middle' }
-                                    }}
-                                />
-                                <ChartTooltip
-                                    cursor={false}
-                                    content={<ChartTooltipContent hideLabel />}
-                                />
-                                <Line
-                                    dataKey="responseMs"
-                                    type="natural"
-                                    stroke="green"
-                                    strokeWidth={2}
-                                    dot={false}
-                                />
-                            </LineChart>
-                        </ChartContainer>
-                    </CardContent>
-                </Card>
-                <LatencyMatrix />
-                <RecentIncident />
+                {tabsContent}
             </div>
         </>
     )

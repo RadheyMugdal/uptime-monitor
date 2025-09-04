@@ -7,6 +7,7 @@ import { ArrowUpDown, MoreHorizontal, SquareArrowOutUpRight, Trash2 } from "luci
 import type { Monitor } from "../../schema"
 import { cn } from "@/lib/utils"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 
 
 export const columns: ColumnDef<Monitor>[] = [
@@ -86,8 +87,10 @@ export const columns: ColumnDef<Monitor>[] = [
   },
   {
     id: "actions",
-    cell: ({ row }) => {
-      const payment = row.original
+    cell: ({ row, table }) => {
+      const monitor = row.original
+      const openDeleteDialog = table.options.meta?.openDeleteDialog
+      const router = useRouter()
 
       return (
         <DropdownMenu>
@@ -100,14 +103,18 @@ export const columns: ColumnDef<Monitor>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
+              onClick={() => router.push(`/dashboard/monitors/${monitor.id}`)}
             >
               <SquareArrowOutUpRight />
               Open monitor
             </DropdownMenuItem>
-            <DropdownMenuItem variant="destructive">
+            <DropdownMenuItem variant="destructive" onSelect={(e) => {
+              e.preventDefault()
+              openDeleteDialog?.(monitor)
+            }}>
               <Trash2 />
-              Delete monitor</DropdownMenuItem>
+              Delete monitor
+            </DropdownMenuItem>
 
           </DropdownMenuContent>
         </DropdownMenu>
