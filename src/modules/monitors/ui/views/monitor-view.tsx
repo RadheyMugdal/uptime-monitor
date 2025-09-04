@@ -92,15 +92,6 @@ const MonitorView = () => {
                 </div>
             </header>
             <div className="flex  flex-1 flex-col gap-4 p-4 pt-0">
-                <Tabs>
-                    <TabsList>
-                        <TabsTrigger value='settings' asChild className='bg-none'>
-                            <Button variant={"ghost"} size={"icon"}>
-                                <Cog className="w-4 h-4" />
-                            </Button>
-                        </TabsTrigger>
-                    </TabsList>
-                </Tabs>
                 <div className='flex items-center  justify-between'>
                     <div className='flex gap-4 items-center'>
                         <div className={cn('size-10  rounded-full relative',
