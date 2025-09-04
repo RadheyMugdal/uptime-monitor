@@ -24,6 +24,17 @@ import { Button } from "@/components/ui/button"
 import { useState } from "react"
 import { Input } from "@/components/ui/input"
 import { useRouter } from "next/navigation"
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog"
+import type { Monitor } from "../../schema"
+import { api } from "@/trpc/react"
+import { toast } from "sonner"
+import { useMonitorsFilter } from "../../hooks/use-monitor-filter"
+
+declare module "@tanstack/react-table" {
+  interface TableMeta<TData extends unknown> {
+    openDeleteDialog?: (monitor: Monitor) => void
+  }
+}
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -37,6 +48,10 @@ export function DataTable<TData, TValue>({
   const router = useRouter()
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const archiveMonitor = api.monitor.deleteMonitor.useMutation()
+  const [filters, setFilters] = useMonitorsFilter()
+  const utils = api.useUtils()
+  const [deleteMonitor, setDeleteMonitor] = useState<Monitor | null>(null)
   const table = useReactTable({
     data,
     columns,
@@ -48,8 +63,24 @@ export function DataTable<TData, TValue>({
     state: {
       columnFilters,
       sorting
+    },
+    meta: {
+      openDeleteDialog: (monitor: Monitor) => setDeleteMonitor(monitor)
     }
   })
+  const handleDelete = async () => {
+    if (!deleteMonitor) return
+    try {
+      await archiveMonitor.mutateAsync({ id: deleteMonitor.id })
+      utils.monitor.getAll.invalidate(filters)
+      toast.success("Monitor deleted successfully")
+    } catch (error: any) {
+      toast.error(error.message || "Failed to delete monitor")
+    } finally {
+      setDeleteMonitor(null)
+    }
+  }
+
 
   return (
     <div>
@@ -108,6 +139,26 @@ export function DataTable<TData, TValue>({
               </TableRow>
             )}
           </TableBody>
+          <AlertDialog open={!!deleteMonitor} onOpenChange={() => setDeleteMonitor(null)}>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>
+                  Delete {deleteMonitor?.name}
+                </AlertDialogTitle>
+                <AlertDialogDescription>
+                  Are you sure you want to delete this monitor? This action cannot be undone.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>
+                  Cancel
+                </AlertDialogCancel>
+                <Button variant={"destructive"} disabled={archiveMonitor.isPending} onClick={handleDelete}>
+                  Delete
+                </Button>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </Table>
       </div>
 

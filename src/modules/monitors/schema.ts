@@ -9,3 +9,5 @@ export type Monitor = RouterOutput["monitor"]["getAll"]["items"][0]
 export type Monitors = Monitor[]
 
 export type Incident = RouterOutput["monitor"]["getLastFiveIncidents"]["incidents"][0]
+
+export type MonitorData = RouterOutput["monitor"]["getMonitorById"]["monitor"]

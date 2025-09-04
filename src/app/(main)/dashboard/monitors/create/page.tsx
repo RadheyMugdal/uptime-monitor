@@ -309,7 +309,7 @@ const CreateMonitorPage = () => {
               </Button>
             </div>
             <div className='flex justify-start mt-10'>
-              <Button type='submit'>
+              <Button type='submit' disabled={createMonitor.isPending}>
                 Start Monitoring
               </Button>
             </div>
