@@ -12,6 +12,11 @@ import { CartesianGrid, Line, LineChart, XAxis, YAxis } from 'recharts'
 import PerformanceMatrix from '../components/performance-matrix'
 import LatencyMatrix from '../components/latency-matrix'
 import RecentIncident from '../components/recent-incidents'
+import { Button } from '@/components/ui/button';
+import { Cog, Pause, Play } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { toast } from 'sonner';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const chartConfig = {
     responseMs: {
@@ -22,7 +27,43 @@ const chartConfig = {
 const MonitorView = () => {
     const id = useParams().id
     const [data] = api.monitor.getMonitorById.useSuspenseQuery({ id: id as string })
+    const utils = api.useUtils()
     const [checkResults] = api.monitor.getLatencyStatsById.useSuspenseQuery({ id: id as string })
+    const pauseMonitor = api.monitor.pauseMonitor.useMutation()
+    const resumeMonitor = api.monitor.resumeMonitor.useMutation()
+
+    const handlePauseMonitor = async () => {
+        try {
+            await pauseMonitor.mutateAsync({ id: id as string })
+            utils.monitor.getMonitorById.setData({ id: id as string }, (oldData) => {
+                if (!oldData) return oldData
+                return {
+                    ...oldData,
+                    monitor: { ...oldData.monitor!, status: "paused" },
+                }
+            })
+            toast.success("Monitor paused successfully")
+        } catch (err: any) {
+            toast.error(err.message ?? "Failed to pause monitor")
+        }
+    }
+
+    const handleResumeMonitor = async () => {
+        try {
+            await resumeMonitor.mutateAsync({ id: id as string })
+            utils.monitor.getMonitorById.setData({ id: id as string }, (oldData) => {
+                if (!oldData) return oldData
+                return {
+                    ...oldData,
+                    monitor: { ...oldData.monitor!, status: "unknown" },
+                }
+            })
+            toast.success("Monitor resumed successfully")
+        } catch (err: any) {
+            toast.error(err.message ?? "Failed to resume monitor")
+        }
+    }
+
 
     return (
         <>
@@ -51,32 +92,65 @@ const MonitorView = () => {
                 </div>
             </header>
             <div className="flex  flex-1 flex-col gap-4 p-4 pt-0">
-                <div className='flex gap-4 items-center'>
-                    <div className={cn('size-10  rounded-full relative',
-                        data.monitor?.status === 'up' && 'bg-green-500',
-                        data.monitor?.status === 'down' && 'bg-red-500',
-                        data.monitor?.status === 'paused' && 'bg-gray-500',
-                    )}>
-                        <div className={cn('  absolute inset-1 animate-ping rounded-full',
+                <Tabs>
+                    <TabsList>
+                        <TabsTrigger value='settings' asChild className='bg-none'>
+                            <Button variant={"ghost"} size={"icon"}>
+                                <Cog className="w-4 h-4" />
+                            </Button>
+                        </TabsTrigger>
+                    </TabsList>
+                </Tabs>
+                <div className='flex items-center  justify-between'>
+                    <div className='flex gap-4 items-center'>
+                        <div className={cn('size-10  rounded-full relative',
                             data.monitor?.status === 'up' && 'bg-green-500',
                             data.monitor?.status === 'down' && 'bg-red-500',
-                            data.monitor?.status === 'paused' && 'bg-gray-500',
+                            data.monitor?.status === 'paused' && 'bg-yellow-500',
+                            data.monitor?.status === "unknown" && 'bg-gray-500'
                         )}>
+                            <div className={cn('  absolute inset-1 animate-ping rounded-full',
+                                data.monitor?.status === 'up' && 'bg-green-500',
+                                data.monitor?.status === 'down' && 'bg-red-500',
+                                data.monitor?.status === 'paused' && 'bg-yellow-500',
+                                data.monitor?.status === "unknown" && 'bg-gray-500',
+                            )}>
+                            </div>
+                        </div>
+                        <div>
+                            <h1 className='text-xl font-semibold'>{data.monitor?.name}</h1>
+                            <span className=' text-sm'>
+                                Monitor for {" "}
+                                <Link href={data.monitor?.url!} className={cn(" hover:underline",
+                                    data.monitor?.status === 'up' && 'text-green-500',
+                                    data.monitor?.status === 'down' && 'text-red-500',
+                                )}>
+                                    {data.monitor?.url}
+                                </Link>
+                            </span>
                         </div>
                     </div>
-                    <div>
-                        <h1 className='text-xl font-semibold'>{data.monitor?.name}</h1>
-                        <span className=' text-sm'>
-                            Monitor for {" "}
-                            <Link href={data.monitor?.url!} className={cn(" hover:underline",
-                                data.monitor?.status === 'up' && 'text-green-500',
-                                data.monitor?.status === 'down' && 'text-red-500',
-                            )}>
-                                {data.monitor?.url}
-                            </Link>
-                        </span>
-                    </div>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <Button variant={"ghost"} size={"icon"}
+                                onClick={() => {
+                                    data.monitor?.status === "paused" ? handleResumeMonitor() : handlePauseMonitor()
+                                }}
+                                disabled={pauseMonitor.isPending || resumeMonitor.isPending}
+                            >
+                                {
+                                    data.monitor?.status === "paused" ? <Play /> : <Pause />
+                                }
+                            </Button>
+                        </TooltipTrigger>
+                        <TooltipContent side="bottom">
+                            {
+                                data.monitor?.status === "paused" ? "Resume Monitor" : "Pause Monitor"
+                            }
+                        </TooltipContent>
+                    </Tooltip>
                 </div>
+
                 <PerformanceMatrix />
 
                 <Card className=' max-h-[500px]'>

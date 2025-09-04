@@ -1,6 +1,6 @@
 "use client";
 import * as React from "react"
-import { Siren, SquareTerminal } from "lucide-react";
+import { Monitor, Plug, Siren, SquareTerminal, TriangleAlert } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main"
 import { NavUser } from "@/components/nav-user"
@@ -22,14 +22,21 @@ const data = {
     {
       title: "Monitors",
       url: "/dashboard/monitors",
-      icon: SquareTerminal,
+      icon: Monitor,
       isActive: true,
 
     },
     {
       title: "incidents",
       url: "/dashboard/incidents",
-      icon: Siren,
+      icon: TriangleAlert,
+      isActive: true,
+
+    },
+    {
+      title: "integrations",
+      url: "/dashboard/integrations",
+      icon: Plug,
       isActive: true,
 
     },

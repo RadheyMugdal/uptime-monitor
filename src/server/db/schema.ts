@@ -61,7 +61,7 @@ export const verification = pgTable("verification", {
 	),
 });
 
-export const status = pgEnum("status", ["up", "down", "paused"]);
+export const status = pgEnum("status", ["up", "down", "paused", "unknown"]);
 export const methods = pgEnum("methods", ["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS"]);
 
 export const monitor = pgTable("monitor", (t) => ({
@@ -72,11 +72,11 @@ export const monitor = pgTable("monitor", (t) => ({
 	// Store frequency in minutes
 	frequencyMinutes: t.integer("frequency_minutes").notNull().default(5),
 	body: t.json("body").notNull().default({}),
-	status: status("status").notNull().default("paused"),
+	status: status("status").notNull().default("unknown"),
 	method: methods("method").notNull().default("GET"),
 	headers: t.json("headers").notNull().default({}),
 	expectedStatus: t.integer("expected_status").notNull().default(200),
-
+	lastCheckedAt: t.timestamp("last_checked_at", { withTimezone: true }),
 	userId: t.text("user_id").notNull().references(() => user.id, { onDelete: "cascade" }),
 
 	createdAt: t.timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
@@ -86,26 +86,41 @@ export const monitor = pgTable("monitor", (t) => ({
 export const checkResult = pgTable("check_result", (t) => ({
 	id: t.uuid("id").primaryKey().defaultRandom(),
 	monitorId: t.uuid("monitor_id").notNull().references(() => monitor.id, { onDelete: "cascade" }),
-	status: status("status").notNull().default("up"),
+	status: status("status").notNull(),
 	responseMs: t.integer("response_ms").notNull(),
 	createdAt: t.timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 	updatedAt: t.timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
 }));
 
+export const incidentStatus = pgEnum("incident_status", ["open", "resolved"]);
 
 export const incident = pgTable("incident", (t) => ({
 	id: t.uuid("id").primaryKey().defaultRandom(),
 	monitorId: t.uuid("monitor_id").notNull().references(() => monitor.id, { onDelete: "cascade" }),
 	userId: t.text("user_id").notNull().references(() => user.id, { onDelete: "cascade" }),
-	// status during incident (usually "down")
-	status: status("status").notNull().default("down"),
-
+	status: incidentStatus("status").notNull().default("open"),
 	startAt: t.timestamp("start_at", { withTimezone: true }).notNull().defaultNow(),
-	endAt: t.timestamp("end_at", { withTimezone: true }), // null if ongoing
+	endAt: t.timestamp("end_at", { withTimezone: true }),
+	durationMs: t.integer("duration_ms"),
+	errorMessage: t.text("error_message"),
+	createdAt: t.timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+	updatedAt: t.timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+}));
 
-	durationMs: t.integer("duration_ms"), // can be computed, optional
-	errorMessage: t.text("error_message"), // optional: HTTP 500, timeout, etc.
 
+
+export const channelType = pgEnum("channel_type", [
+	"email",
+	"slack",
+	"discord",
+	"webhook"
+]);
+
+export const notificationChannel = pgTable("notification_channel", (t) => ({
+	id: t.uuid("id").primaryKey().defaultRandom(),
+	userId: t.text("user_id").notNull().references(() => user.id, { onDelete: "cascade" }),
+	type: channelType("type").notNull(),
+	value: t.text("value").notNull(),
 	createdAt: t.timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 	updatedAt: t.timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
 }));

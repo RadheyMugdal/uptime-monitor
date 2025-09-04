@@ -235,6 +235,9 @@ const CreateMonitorPage = () => {
                     <Input
                       {...field}
                       type='number'
+                      onChange={(e) => {
+                        field.onChange(Number(e.target.value))
+                      }}
                     />
                   </FormControl>
                   <FormMessage />

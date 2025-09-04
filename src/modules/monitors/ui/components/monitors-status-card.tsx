@@ -4,11 +4,13 @@ import { ChartContainer, ChartLegend, ChartLegendContent, type ChartConfig } fro
 import { api } from '@/trpc/react'
 import React from 'react'
 import { Pie, PieChart } from 'recharts'
+import { unknown } from 'zod'
 
 const chartConfig = {
     up: { label: "Up", color: "#00ff00" },
     down: { label: "Down", color: "red" },
     paused: { label: "Paused", color: "gray" },
+    unknown: { label: "Unknown", color: "blue" },
 } satisfies ChartConfig
 
 const MonitorsStatusCard = () => {

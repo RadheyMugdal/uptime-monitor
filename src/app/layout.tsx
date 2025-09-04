@@ -6,6 +6,7 @@ import { Geist } from "next/font/google";
 import { TRPCReactProvider } from "@/trpc/react";
 import { ThemeProvider } from "@/components/theme-provider";
 import { NuqsAdapter } from 'nuqs/adapters/next/app'
+import { Toaster } from "sonner";
 
 
 export const metadata: Metadata = {
@@ -33,6 +34,7 @@ export default function RootLayout({
 						disableTransitionOnChange
 					>
 						<TRPCReactProvider>{children}</TRPCReactProvider>
+						<Toaster />
 					</ThemeProvider>
 				</NuqsAdapter>
 			</body>

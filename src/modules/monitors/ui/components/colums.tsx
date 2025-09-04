@@ -43,27 +43,46 @@ export const columns: ColumnDef<Monitor>[] = [
     accessorKey: "status",
     header: ({ column }) => {
       return (
-        <Button variant={"ghost"} onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
           Status
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       )
     },
     cell: ({ row }) => {
-      const isUp = row.getValue("status") === "up"
+      const status = row.getValue("status") as string
 
-      return <div className="flex items-center ">
-        <div className={
-          cn(
-            " text-white rounded-2xl text-sm h-full px-3  ",
-            isUp ? "bg-green-400" : "bg-red-500"
-          )
-        }>
-          {isUp ? "Online" : "Offline"}
+      const statusMap: Record<
+        string,
+        { label: string; className: string }
+      > = {
+        up: { label: "Online", className: "bg-green-500" },
+        down: { label: "Offline", className: "bg-red-500" },
+        pending: { label: "Checking…", className: "bg-yellow-400" },
+        paused: { label: "Paused", className: "bg-gray-400" },
+      }
+
+      const { label, className } = statusMap[status] || {
+        label: "Unknown",
+        className: "bg-muted text-foreground",
+      }
+
+      return (
+        <div className="flex items-center">
+          <span
+            className={cn(
+              "text-white rounded-2xl text-sm px-3 py-0.5 font-medium",
+              className
+            )}
+          >
+            {label}
+          </span>
         </div>
-      </div>
+      )
     },
-
   },
   {
     id: "actions",

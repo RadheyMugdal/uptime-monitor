@@ -5,6 +5,7 @@ import { checkResult, incident, monitor } from "@/server/db/schema"
 import { and, count, desc, eq, gt, like, sql } from "drizzle-orm"
 import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } from "@/modules/monitors/constants"
 import { monitorQueue } from "@/lib/queue"
+import { TRPCError } from "@trpc/server"
 
 
 export const monitorRouter = createTRPCRouter({
@@ -72,7 +73,8 @@ export const monitorRouter = createTRPCRouter({
         const fill = {
             up: "green",
             down: "red",
-            paused: "gray"
+            paused: "yellow",
+            unknown: "gray"
         }
         const statusDataRaw = await db.select({
             status: monitor.status,
@@ -174,5 +176,29 @@ export const monitorRouter = createTRPCRouter({
         return {
             incidents
         }
-    })
+    }),
+    pauseMonitor: protectedProcedure.input(z.object({
+        id: z.string()
+    })).mutation(async ({ ctx, input }) => {
+        await db.update(monitor).set({ status: "paused" }).where(eq(monitor.id, input.id))
+        await monitorQueue.remove(`monitor-${input.id}`)
+        return true
+    }),
+    resumeMonitor: protectedProcedure.input(z.object({
+        id: z.string()
+    })).mutation(async ({ ctx, input }) => {
+        const [data] = await db.update(monitor).set({ status: "up" }).where(eq(monitor.id, input.id)).returning()
+        if (!data) throw new TRPCError({ code: 'NOT_FOUND', message: 'Monitor not found' })
+        await monitorQueue.add(
+            'check-monitor',
+            { monitorId: input.id },
+            {
+                jobId: `monitor-${input.id}`,
+                repeat: { every: data.frequencyMinutes * 60 * 1000 },
+                removeOnFail: true,
+                removeOnComplete: true
+            }
+        )
+        return true
+    }),
 })
