@@ -9,6 +9,19 @@ export const auth = betterAuth({
         provider: "pg",
         schema
     }),
+    databaseHooks: {
+        user: {
+            create: {
+                async after(user, context) {
+                    const channel = await db.insert(schema.notificationChannel).values({
+                        userId: user.id,
+                        type: "email",
+                        value: user.email,
+                    }).returning()
+                },
+            }
+        }
+    },
     emailAndPassword: {
         enabled: true,
     },
