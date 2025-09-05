@@ -26,7 +26,7 @@ export const incidentRouter = createTRPCRouter({
             .where(eq(incident.userId, ctx.user.id))
             .orderBy(desc(incident.createdAt))
             .limit(DEFAULT_PAGE_SIZE)
-            .offset(input.page * DEFAULT_PAGE_SIZE);
+            .offset((input.page - 1) * DEFAULT_PAGE_SIZE);
 
         const [totalIncidents] = await db.select({ count: count(incident.id) }).from(incident).where(eq(incident.userId, ctx.user.id))
 
