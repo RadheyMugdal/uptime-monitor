@@ -50,7 +50,7 @@ export const monitorRouter = createTRPCRouter({
 
     }),
     getAll: protectedProcedure.input(z.object({
-        page: z.number().optional().default(0),
+        page: z.number().optional().default(DEFAULT_PAGE),
         search: z.string().optional().default(""),
 
     })).query(async ({ ctx, input }) => {
@@ -60,12 +60,12 @@ export const monitorRouter = createTRPCRouter({
             url: monitor.url,
             frequencyMinutes: monitor.frequencyMinutes,
             status: monitor.status,
-        }).from(monitor).where(and(eq(monitor.userId, ctx.user.id), like(monitor.name, "%" + input.search + "%"))).limit(DEFAULT_PAGE_SIZE).offset(input.page * DEFAULT_PAGE)
+        }).from(monitor).where(and(eq(monitor.userId, ctx.user.id), like(monitor.name, "%" + input.search + "%"))).limit(DEFAULT_PAGE_SIZE).offset((input.page - 1) * DEFAULT_PAGE_SIZE)
 
         const [rowCount] = await db.select({ count: count(monitor.id) }).from(monitor).where(eq(monitor.userId, ctx.user.id))
         return {
             items: monitors,
-            totalPages: Math.ceil((rowCount?.count || 0) / 10)
+            totalPages: Math.ceil((rowCount?.count || 0) / DEFAULT_PAGE_SIZE)
         }
 
     }),
