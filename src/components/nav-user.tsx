@@ -30,13 +30,17 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 import type { User } from "better-auth"
+import { useRouter } from "next/navigation"
 
 export function NavUser({
   user,
+  plan
 }: {
-  user: User
+  user: User,
+  plan: "pro" | "business" | "free"
 }) {
   const { isMobile } = useSidebar()
+  const router = useRouter()
 
   return (
     <SidebarMenu>
@@ -80,24 +84,25 @@ export function NavUser({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <Sparkles />
-                Upgrade to Pro
-              </DropdownMenuItem>
+              {
+                plan === "free" && (
+                  <DropdownMenuItem onClick={() => {
+                    router.push("/pricing")
+                  }}>
+                    <Sparkles />
+                    Upgrade to Pro
+                  </DropdownMenuItem>
+                )
+              }
+
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <BadgeCheck />
-                Account
-              </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => {
+                router.push("/pricing")
+              }}>
                 <CreditCard />
                 Billing
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Bell />
-                Notifications
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />

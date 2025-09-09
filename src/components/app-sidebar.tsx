@@ -137,7 +137,7 @@ const data = {
   // ],
 }
 
-export function AppSidebar({ user, ...props }: React.ComponentProps<typeof Sidebar> & { user: User }) {
+export function AppSidebar({ user, plan, ...props }: React.ComponentProps<typeof Sidebar> & { user: User, plan: "pro" | "business" | "free" }) {
   return (
     <Sidebar variant="inset" {...props}>
       <SidebarHeader>
@@ -159,7 +159,7 @@ export function AppSidebar({ user, ...props }: React.ComponentProps<typeof Sideb
         <NavSecondary items={data.navSecondary} className="mt-auto" /> */}
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={user} />
+        <NavUser user={user} plan={plan} />
       </SidebarFooter>
     </Sidebar>
   )

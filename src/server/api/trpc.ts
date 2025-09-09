@@ -13,6 +13,8 @@ import { ZodError } from "zod";
 import { db } from "@/server/db";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import { PLAN_LIMITS } from "@/modules/pricing/limits";
+import { polarClient } from "@/lib/polar";
 
 /**
  * 1. CONTEXT
@@ -107,21 +109,37 @@ const timingMiddleware = t.middleware(async ({ next, path }) => {
  */
 export const publicProcedure = t.procedure.use(timingMiddleware);
 
-export const protectedProcedure=publicProcedure.use(async ({ ctx, next }) => {
-	const data =await auth.api.getSession({
-		headers:await headers()
+export const protectedProcedure = publicProcedure.use(async ({ ctx, next }) => {
+	const data = await auth.api.getSession({
+		headers: await headers()
 	})
-	if(!data?.session){
+	if (!data?.session) {
 		throw new TRPCError({
-			code:"UNAUTHORIZED",
-			message:"Authentication required",
-			cause:"No session found"
+			code: "UNAUTHORIZED",
+			message: "Authentication required",
+			cause: "No session found"
 		})
 	}
 	return next({
-		ctx:{
-			user:data.user,
+		ctx: {
+			user: data.user,
 			...ctx,
 		}
 	})
 });
+
+
+export const premiumProcedure = protectedProcedure.use(async ({ ctx, next }) => {
+	const plan = await auth.api.state({
+		headers: ctx.headers
+	})
+	const subscription = await polarClient.products.get({ id: plan.activeSubscriptions[0]?.productId as string })
+	const currentPlanName = subscription?.name.toLowerCase() as "pro" | "business" || "free"
+
+	return next({
+		ctx: {
+			...ctx,
+			planLimits: PLAN_LIMITS[currentPlanName]
+		}
+	})
+})
