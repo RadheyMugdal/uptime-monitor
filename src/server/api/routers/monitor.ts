@@ -1,5 +1,5 @@
 import z from "zod"
-import { createTRPCRouter, protectedProcedure } from "../trpc"
+import { createTRPCRouter, premiumProcedure, protectedProcedure } from "../trpc"
 import { db } from "@/server/db"
 import { checkResult, incident, monitor } from "@/server/db/schema"
 import { and, count, desc, eq, gt, like, sql } from "drizzle-orm"
@@ -9,7 +9,7 @@ import { TRPCError } from "@trpc/server"
 
 
 export const monitorRouter = createTRPCRouter({
-    create: protectedProcedure.input(
+    create: premiumProcedure.input(
         z.object({
             name: z.string(),
             headers: z.json(),
@@ -20,6 +20,13 @@ export const monitorRouter = createTRPCRouter({
             frequencyMinutes: z.number()
         })
     ).mutation(async ({ input, ctx }) => {
+        if (input.frequencyMinutes < ctx.planLimits.minFrequencyMinutes) {
+            throw new TRPCError({ code: "PAYMENT_REQUIRED", message: `The minimum monitor interval for your plan is ${ctx.planLimits.minFrequencyMinutes} minutes. Please upgrade your plan to set a lower interval.` })
+        }
+        const [totalMonitors] = await db.select({ count: count(monitor.id) }).from(monitor).where(eq(monitor.userId, ctx.user.id))
+        if (totalMonitors && totalMonitors.count === ctx.planLimits.maxMonitors) {
+            throw new TRPCError({ code: 'PAYMENT_REQUIRED', message: `You have reached the maximum number of monitors for your plan (${ctx.planLimits.maxMonitors}). Please upgrade your plan to add more monitors.` })
+        }
         const [createdMonitor] = await db.insert(monitor).values({
             name: input.name,
             headers: input.headers,
@@ -207,7 +214,7 @@ export const monitorRouter = createTRPCRouter({
         )
         return true
     }),
-    updateMonitor: protectedProcedure.input(z.object({
+    updateMonitor: premiumProcedure.input(z.object({
         id: z.string(),
         name: z.string().optional(),
         url: z.string().optional(),
@@ -217,6 +224,9 @@ export const monitorRouter = createTRPCRouter({
         body: z.string().optional(),
         headers: z.json().optional(),
     })).mutation(async ({ ctx, input }) => {
+        if (input.frequencyMinutes && input.frequencyMinutes < ctx.planLimits.minFrequencyMinutes) {
+            throw new TRPCError({ code: 'PAYMENT_REQUIRED', message: `The minimum monitor interval for your plan is ${ctx.planLimits.minFrequencyMinutes} minutes. Please upgrade your plan to set a lower interval.` })
+        }
         const [data] = await db.update(monitor).set({
             name: input.name,
             url: input.url,
