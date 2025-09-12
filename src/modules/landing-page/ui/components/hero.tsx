@@ -39,10 +39,6 @@ const Hero = () => {
                             View Demo
                         </Button>
                     </div>
-
-                    <div className='w-[70%] mt-24 aspect-video rounded-2xl bg-muted'>
-                        {/* Demo video / image placeholder */}
-                    </div>
                 </div>
             </div>
         </div>

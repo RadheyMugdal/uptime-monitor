@@ -1,13 +1,10 @@
 import "@/styles/globals.css";
 
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
-
 import { TRPCReactProvider } from "@/trpc/react";
 import { ThemeProvider } from "@/components/theme-provider";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Toaster } from "sonner";
-import { Figtree } from "next/font/google";
 import { Nunito } from 'next/font/google';
 
 export const metadata: Metadata = {
@@ -93,17 +90,11 @@ export const metadata: Metadata = {
   manifest: "/site.webmanifest",
 };
 
-const geist = Geist({
-  subsets: ["latin"],
-  variable: "--font-geist-sans",
-});
-const figtree = Figtree({
-  subsets: ["latin"],
-  variable: "--font-figtree", // optional (for Tailwind)
-});
+
+
 const nunito = Nunito({
   subsets: ['latin'], // include required subsets
-  weight: ['400', '700'], // optional weights
+  display: "swap",
   variable: '--font-nunito', // optional for CSS variable
 });
 
