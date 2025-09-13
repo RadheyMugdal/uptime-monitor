@@ -81,14 +81,14 @@ const cardVariants = {
 };
 
 export default function PricingSection({
-  currentPlan,
+
 }: {
-  currentPlan: "free" | "pro" | "business";
-}) {
+
+  }) {
   return (
     <section id="pricing" className="py-24 px-4 relative overflow-hidden">
       <div className="container mx-auto relative z-10">
-        <Badge className="bg-green-600/20 my-3   backdrop:blur-xl rounded-full  text-sm">
+        <Badge className=" bg-green-600/20   my-3  light:text-black backdrop:blur-xl block   mx-auto rounded-full">
           Pricing
         </Badge>
         {/* Heading */}
@@ -125,9 +125,9 @@ export default function PricingSection({
                 price={plan.price}
                 productId={plan.productId}
                 benefits={plan.benefits}
-                isCurrentSubscription={currentPlan === plan.productId}
+                isCurrentSubscription={false}
                 isPopular={plan.isPopular}
-                currentPlan={currentPlan}
+                currentPlan={"free"}
               />
             </motion.div>
           ))}

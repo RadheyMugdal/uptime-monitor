@@ -63,14 +63,20 @@ export default function Footer() {
                 transition={{ duration: 0.6 }}
                 className="space-y-6"
               >
-                <div className="flex items-center space-x-3">
-                  <div className="p-2 rounded-xl bg-gradient-to-r ">
-                    <Monitor className="w-6 h-6 " />
+
+
+                <div className=" flex  flex-1  text-left text-2xl items-center gap-1 font-semibold leading-tight">
+                  <svg xmlns="http://www.w3.org/2000/svg" width={35} height={35} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-alarm-average"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M5 13a7 7 0 1 0 14 0a7 7 0 0 0 -14 0" /><path d="M7 4l-2.75 2" /><path d="M17 4l2.75 2" /><path d="M8 13h1l2 3l2 -6l2 3h1" /></svg>
+                  <div>
+                    <span>
+                      Uptime
+                    </span>
+                    <span className="font-bold">
+                      Watch
+                    </span>
                   </div>
-                  <span className="text-2xl font-bold e">
-                    Uptime Monitor
-                  </span>
                 </div>
+
                 <p className=" opacity-75 max-w-md">
                   The most reliable uptime monitoring service for your websites,
                   APIs, and services. Never miss a downtime again.

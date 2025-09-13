@@ -40,7 +40,7 @@ export default function IntegrationsSection() {
   return (
     <section id="integrations" className="py-24 px-4 relative overflow-hidden  max-w-7xl mx-auto">
       <div className="container mx-auto relative z-10 flex flex-col items-center justify-center gap-3">
-        <Badge className="bg-green-600/20 my-3  backdrop:blur-xl rounded-full  text-sm">
+        <Badge className=" bg-green-600/20   my-3  light:text-black backdrop:blur-xl  rounded-full">
           Integrations
         </Badge>
         <motion.div

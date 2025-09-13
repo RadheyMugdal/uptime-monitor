@@ -72,7 +72,7 @@ const page = () => {
       <Hero />
       <FeaturesSection />
       <IntegrationsSection />
-      <PricingSection currentPlan="free" />
+      <PricingSection />
       <CTASection />
       <Footer />
     </>

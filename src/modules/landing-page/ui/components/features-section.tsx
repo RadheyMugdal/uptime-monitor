@@ -48,7 +48,7 @@ export default function FeaturesSection() {
     <section className="py-24 px-8 max-w-7xl mx-auto">
       {/* Header Section */}
       <div className="text-center mb-16">
-        <Badge className="bg-green-600/20  backdrop:blur-xl my-3 rounded-full  text-sm">
+        <Badge className=" bg-green-600/20   my-3  light:text-black backdrop:blur-xl  rounded-full">
           Features
         </Badge>
         <h2 className="text-3xl md:text-4xl font-bold mb-6">
@@ -61,7 +61,7 @@ export default function FeaturesSection() {
       </div>
 
       <div className="grid md:grid-cols-3 gap-8">
-        <div className="border md:col-span-2 rounded-2xl bg-black/20 before:size-52 before:-right-20 before:-top-[30%] before:rounded-full before:bg-primary before:absolute before:-z-10 before:content-[''] before:blur-2xl overflow-hidden relative backdrop:blur-lg">
+        <div className="border md:col-span-2 rounded-2xl bg-secondary/20 before:size-52 before:-right-20 before:-top-[30%] before:rounded-full before:bg-primary before:absolute before:-z-10 before:content-[''] before:blur-2xl overflow-hidden relative backdrop:blur-lg">
           <div className="p-12 flex flex-col gap-8">
             <div className="flex flex-col gap-4">
               <div className="flex flex-col gap-2">
@@ -90,7 +90,7 @@ export default function FeaturesSection() {
           </div>
         </div>
 
-        <div className="border rounded-2xl bg-black/20 before:size-52 before:-right-20 before:-bottom-[30%] before:rounded-full before:bg-primary before:absolute before:-z-10 before:content-[''] before:blur-2xl overflow-hidden relative backdrop:blur-lg">
+        <div className="border rounded-2xl  bg-secondary/20 before:size-52 before:-right-20 before:-bottom-[30%] before:rounded-full before:bg-primary before:absolute before:-z-10 before:content-[''] before:blur-2xl overflow-hidden relative backdrop:blur-lg">
           <div className="p-12 flex flex-col gap-8">
             <div className="flex flex-col gap-4">
               <div className="flex flex-col gap-2">
@@ -119,7 +119,7 @@ export default function FeaturesSection() {
           </div>
         </div>
 
-        <div className="border rounded-2xl bg-black/20 before:size-52 before:-right-20 before:-bottom-[30%] before:rounded-full before:bg-primary before:absolute before:-z-10 before:content-[''] before:blur-2xl overflow-hidden relative backdrop:blur-lg">
+        <div className="border rounded-2xl bg-secondary/20 before:size-52 before:-right-20 before:-bottom-[30%] before:rounded-full before:bg-primary before:absolute before:-z-10 before:content-[''] before:blur-2xl overflow-hidden relative backdrop:blur-lg">
           <div className="p-12 flex flex-col gap-8">
             <div className="flex flex-col gap-4">
               <div className="flex flex-col gap-2">
@@ -148,7 +148,7 @@ export default function FeaturesSection() {
           </div>
         </div>
 
-        <div className="border md:col-span-2 rounded-2xl bg-black/20 before:size-52 before:-right-20 before:-top-[30%] before:rounded-full before:bg-primary before:absolute before:-z-10 before:content-[''] before:blur-2xl overflow-hidden relative backdrop:blur-lg">
+        <div className="border md:col-span-2 rounded-2xl bg-secondary/20 before:size-52 before:-right-20 before:-top-[30%] before:rounded-full before:bg-primary before:absolute before:-z-10 before:content-[''] before:blur-2xl overflow-hidden relative backdrop:blur-lg">
           <div className="p-12 flex flex-col gap-8">
             <div className="flex flex-col gap-4">
               <div className="flex flex-col gap-2">

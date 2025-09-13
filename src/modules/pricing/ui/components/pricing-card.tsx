@@ -44,7 +44,7 @@ const PricingCard: React.FC<Props> = ({
     return (
         <Card className="relative h-full">
             {isPopular && (
-                <Badge className="absolute right-4 top-4 bg-green-600/20  backdrop:blur-3xl">
+                <Badge className="absolute right-4 top-4 bg-green-600/20   light:text-black backdrop:blur-3xl">
                     🔥Popular</Badge>
             )}
             <CardHeader>
@@ -57,7 +57,7 @@ const PricingCard: React.FC<Props> = ({
             </CardHeader>
             <CardContent className="flex flex-col gap-6">
                 {action !== "none" && (
-                    <Button className="w-full" onClick={handleClick} variant={name !=="Free"?"default":"secondary"}>
+                    <Button className="w-full" onClick={handleClick} variant={name !== "Free" ? "default" : "secondary"}>
                         {label}
                     </Button>
                 )}

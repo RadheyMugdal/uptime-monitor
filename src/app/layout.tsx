@@ -5,10 +5,10 @@ import { TRPCReactProvider } from "@/trpc/react";
 import { ThemeProvider } from "@/components/theme-provider";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Toaster } from "sonner";
-import { Nunito } from 'next/font/google';
+import { Nunito } from "next/font/google";
 
 export const metadata: Metadata = {
-  title: "Uptime Monitor - Never Miss a Downtime Again",
+  title: "UptimeWatch - Never Miss a Downtime Again",
   description:
     "Professional uptime monitoring for websites, APIs, and services. Get instant alerts via Email, Discord, Slack, and Webhooks. 99.9% uptime guarantee with 24/7 monitoring.",
   keywords: [
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     "reliability monitoring",
   ],
   authors: [{ name: "Uptime Monitor Team" }],
-  creator: "Uptime Monitor",
+  creator: "Uptime Watch",
   publisher: "Uptime Monitor",
   formatDetection: {
     email: false,
@@ -71,38 +71,26 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  icons: [
-    { rel: "icon", url: "/favicon.ico" },
-    { rel: "apple-touch-icon", url: "/apple-touch-icon.png" },
-    {
-      rel: "icon",
-      type: "image/png",
-      sizes: "32x32",
-      url: "/favicon-32x32.png",
-    },
-    {
-      rel: "icon",
-      type: "image/png",
-      sizes: "16x16",
-      url: "/favicon-16x16.png",
-    },
-  ],
+
   manifest: "/site.webmanifest",
 };
 
-
-
 const nunito = Nunito({
-  subsets: ['latin'], // include required subsets
+  subsets: ["latin"], // include required subsets
   display: "swap",
-  variable: '--font-nunito', // optional for CSS variable
+  variable: "--font-nunito", // optional for CSS variable
 });
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${nunito.variable} subpixel-antialiased`} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${nunito.variable} subpixel-antialiased`}
+      suppressHydrationWarning
+    >
+      <meta name="apple-mobile-web-app-title" content="UptimeWatch" />
       <body>
         <NuqsAdapter>
           <ThemeProvider

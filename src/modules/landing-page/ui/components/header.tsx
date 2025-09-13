@@ -37,10 +37,21 @@ const Header = () => {
     const [isOpen, setIsOpen] = useState(false)
     return (
 
-        <header className=' w-[90vw] md:w-[80vw] mx-auto py-2 md:py-4 px-6 md:px-10 rounded-full fixed top-10 inset-x-1/2 -translate-x-1/2 bg-[#0A0A0A]/30 backdrop-blur-lg border-white/10 border z-30' >
+        <header className=' w-[90vw] md:w-[80vw] mx-auto py-2 md:py-4 px-6 md:px-10 rounded-full fixed top-10 inset-x-1/2 -translate-x-1/2 bg-secondary/30  dark:bg-[#0A0A0A]/30 backdrop-blur-lg border z-30' >
             <div className='flex justify-between items-center'>
                 {/* Logo */}
-                <h1 className='flex gap-2 text-lg font-semibold'>Uptime</h1>
+                <div className=" flex  flex-1  text-left text-lg  items-center gap-1 font-semibold leading-tight">
+                    <svg xmlns="http://www.w3.org/2000/svg" width={30} height={30} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-alarm-average"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M5 13a7 7 0 1 0 14 0a7 7 0 0 0 -14 0" /><path d="M7 4l-2.75 2" /><path d="M17 4l2.75 2" /><path d="M8 13h1l2 3l2 -6l2 3h1" /></svg>
+                    <div>
+                        <span>
+                            Uptime
+                        </span>
+                        <span className="font-bold">
+                            Watch
+                        </span>
+                    </div>
+                </div>
+
 
                 {/* Desktop nav */}
                 <div className='hidden md:flex items-center gap-6'>
@@ -51,7 +62,7 @@ const Header = () => {
                             </li>
                         ))}
                     </ul>
-                    <Button size="sm" className='rounded-full'>
+                    <Button size="sm" >
                         Get started
                     </Button>
                 </div>
