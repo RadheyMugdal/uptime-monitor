@@ -1,81 +1,132 @@
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Separator } from '@/components/ui/separator'
-import { authClient } from '@/lib/authClient'
-import { Check } from 'lucide-react'
-import React from 'react'
-import { getPlanButtonState } from '../../util'
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { authClient } from "@/lib/authClient";
+import { Check } from "lucide-react";
+import React from "react";
+import { getPlanButtonState } from "../../util";
+import { motion } from "framer-motion";
 interface Props {
-    name: string
-    description: string
-    recurringInterval: string
-    price: string
-    productId: string
-    benefits: string[]
-    isCurrentSubscription: boolean
-    isPopular: boolean
-    currentPlan: "free" | "pro" | "business"
+  name: string;
+  description: string;
+  recurringInterval: string;
+  price: string;
+  productId: string;
+  benefits: string[];
+  isCurrentSubscription: boolean;
+  isPopular: boolean;
+  currentPlan: "free" | "pro" | "business";
 }
 
 const PricingCard: React.FC<Props> = ({
-    name,
-    description,
-    recurringInterval,
-    price,
-    productId,
-    benefits,
-    isCurrentSubscription,
-    isPopular,
-    currentPlan,
+  name,
+  description,
+  recurringInterval,
+  price,
+  productId,
+  benefits,
+  isCurrentSubscription,
+  isPopular,
+  currentPlan,
 }) => {
-    const cardPlan = name.toLowerCase() as "free" | "pro" | "business"
-    const { label, action } = getPlanButtonState(currentPlan, cardPlan)
+  const cardPlan = name.toLowerCase() as "free" | "pro" | "business";
+  const { label, action } = getPlanButtonState(currentPlan, cardPlan);
 
-    const handleClick = async () => {
-        if (action === "portal") {
-            return authClient.customer.portal()
-        }
-        if (action === "upgrade") {
-            return authClient.checkout({ products: [productId] })
-        }
+  const handleClick = async () => {
+    if (action === "portal") {
+      return authClient.customer.portal();
     }
+    if (action === "upgrade") {
+      return authClient.checkout({ products: [productId] });
+    }
+  };
 
-    return (
-        <Card className="relative">
-            {isPopular && (
-                <Badge className="absolute right-4 top-4">Popular</Badge>
-            )}
-            <CardHeader>
-                <CardTitle className="text-2xl">{name}</CardTitle>
-                <CardDescription>{description}</CardDescription>
-                <CardTitle className="text-4xl mt-4">
-                    {price}{" "}
-                    <span className="text-sm font-normal">/ {recurringInterval}</span>
-                </CardTitle>
-            </CardHeader>
-            <CardContent className="flex flex-col gap-6">
-                {action !== "none" && (
-                    <Button className="w-full" onClick={handleClick}>
-                        {label}
-                    </Button>
-                )}
-                <Separator className="w-full" />
-                <div className="flex flex-col gap-2">
-                    <h4 className="text-sm">What's included</h4>
-                    <ul className="text-sm space-y-1 text-muted-foreground">
-                        {benefits.map((benefit) => (
-                            <li className="flex items-center gap-2" key={benefit}>
-                                <Check className="size-4" />
-                                {benefit}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            </CardContent>
-        </Card>
-    )
-}
+  return (
+    <motion.div transition={{ duration: 0.3 }} className="h-full w-full ">
+      <Card className="relative h-full">
+        {isPopular && (
+          <motion.div
+            initial={{ scale: 0, rotate: -10 }}
+            animate={{ scale: 1, rotate: 0 }}
+            transition={{ duration: 0.5, delay: 0.2, type: "spring" }}
+          >
+            <Badge className="absolute right-4 top-4 bg-green-600/20   light:text-black backdrop:blur-3xl">
+              🔥Popular
+            </Badge>
+          </motion.div>
+        )}
+        <CardHeader>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <CardTitle className="text-2xl">{name}</CardTitle>
+            <CardDescription>{description}</CardDescription>
+            <motion.div
+              initial={{ scale: 0.8 }}
+              whileInView={{ scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+            >
+              <CardTitle className="text-4xl mt-4">
+                {price}{" "}
+                <span className="text-sm font-normal">
+                  / {recurringInterval}
+                </span>
+              </CardTitle>
+            </motion.div>
+          </motion.div>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-6">
+          {action !== "none" && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
+              <Button
+                className="w-full"
+                onClick={handleClick}
+                variant={name !== "Free" ? "default" : "secondary"}
+              >
+                {label}
+              </Button>
+            </motion.div>
+          )}
+          <Separator className="w-full" />
+          <motion.div
+            className="flex flex-col gap-2"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+          >
+            <h4 className="text-sm">What's included</h4>
+            <ul className="text-sm space-y-1 text-muted-foreground">
+              {benefits.map((benefit, index) => (
+                <li className="flex items-center gap-2" key={benefit}>
+                  <div>
+                    <Check className="size-4" />
+                  </div>
+                  {benefit}
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        </CardContent>
+      </Card>
+    </motion.div>
+  );
+};
 
-
-export default PricingCard
+export default PricingCard;

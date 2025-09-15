@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/form"
 import { authClient } from "@/lib/authClient"
 import { toast } from "sonner"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 
 // 1. Define validation schema
 const formSchema = z.object({
@@ -41,6 +41,7 @@ export function LoginForm({
     ...props
 }: React.ComponentProps<"div">) {
     const router = useRouter()
+    const params = useSearchParams()
     const form = useForm<FormData>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -57,7 +58,11 @@ export function LoginForm({
         },
             {
                 onSuccess: () => {
-                    router.push('/dashboard/monitors')
+                    if (params.get('redirect')) {
+                        router.push(params.get('redirect')!)
+                    } else {
+                        router.push('/dashboard/monitors')
+                    }
 
                 },
                 onError: (error) => {
