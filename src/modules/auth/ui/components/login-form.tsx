@@ -26,6 +26,7 @@ import {
 import { authClient } from "@/lib/authClient"
 import { toast } from "sonner"
 import { useRouter, useSearchParams } from "next/navigation"
+import { PasswordInput } from "@/components/ui/password-input";
 
 // 1. Define validation schema
 const formSchema = z.object({
@@ -163,7 +164,7 @@ export function LoginForm({
                                                 </a>
                                             </div>
                                             <FormControl>
-                                                <Input type="password" {...field} />
+                                                <PasswordInput type="password" {...field} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>

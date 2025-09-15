@@ -30,7 +30,9 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 import type { User } from "better-auth"
-import { useRouter } from "next/navigation"
+import { redirect, useRouter } from "next/navigation"
+import { authClient } from "@/lib/authClient"
+import { toast } from "sonner"
 
 export function NavUser({
   user,
@@ -106,7 +108,15 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={async () => {
+              await authClient.signOut({
+                fetchOptions: {
+                  onSuccess: () => {
+                    router.push('/signin')
+                  }
+                }
+              })
+            }}>
               <LogOut />
               Log out
             </DropdownMenuItem>
