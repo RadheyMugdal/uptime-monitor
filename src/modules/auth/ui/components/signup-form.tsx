@@ -27,6 +27,7 @@ import {
 import { authClient } from "@/lib/authClient"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
+import { PasswordInput } from "@/components/ui/password-input"
 
 const formSchema = z.object({
     email: z.string().email("Invalid email address"),
@@ -161,7 +162,7 @@ export function SignupForm({
                                         <FormItem>
                                             <FormLabel>Password</FormLabel>
                                             <FormControl>
-                                                <Input type="password" {...field} />
+                                                <PasswordInput type="password" {...field} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
