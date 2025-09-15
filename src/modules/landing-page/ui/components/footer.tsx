@@ -53,7 +53,7 @@ export default function Footer() {
       <div className="container mx-auto relative z-10">
         {/* Main Footer Content */}
         <div className="py-16 px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8">
+          <div className=" flex  flex-col md:flex-row  justify-between gap-12 ">
             {/* Brand Section */}
             <div className="lg:col-span-2">
               <motion.div
@@ -96,35 +96,38 @@ export default function Footer() {
               </motion.div>
             </div>
 
-            {/* Links Sections */}
-            {Object.entries(footerLinks).map(
-              ([category, links], categoryIndex) => (
-                <motion.div
-                  key={category}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: categoryIndex * 0.1 }}
-                  className="space-y-4"
-                >
-                  <h3 className="text-lg font-semibold ">
-                    {category}
-                  </h3>
-                  <ul className="space-y-3">
-                    {links.map((link) => (
-                      <li key={link.name}>
-                        <Link
-                          href={link.href}
-                          className=" opacity-75 hover:opacity-100 transition-colors text-sm"
-                        >
-                          {link.name}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </motion.div>
-              )
-            )}
+            <div className=" grid  grid-cols-1 md:grid-cols-3 gap-12">
+              {/* Links Sections */}
+              {Object.entries(footerLinks).map(
+                ([category, links], categoryIndex) => (
+                  <motion.div
+                    key={category}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: categoryIndex * 0.1 }}
+                    className="space-y-4"
+                  >
+                    <h3 className="text-lg font-semibold ">
+                      {category}
+                    </h3>
+                    <ul className="space-y-3">
+                      {links.map((link) => (
+                        <li key={link.name}>
+                          <Link
+                            href={link.href}
+                            className=" opacity-75 hover:opacity-100 transition-colors text-sm"
+                          >
+                            {link.name}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </motion.div>
+                )
+              )}
+
+            </div>
           </div>
         </div>
 

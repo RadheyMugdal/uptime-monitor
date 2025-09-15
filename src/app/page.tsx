@@ -4,7 +4,9 @@ import PricingSection from "@/modules/landing-page/ui/components/pricing-section
 import IntegrationsSection from "@/modules/landing-page/ui/components/integrations-section";
 import CTASection from "@/modules/landing-page/ui/components/cta-section";
 import Footer from "@/modules/landing-page/ui/components/footer";
-
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
@@ -62,9 +64,16 @@ const structuredData = {
   },
 };
 
-const page = () => {
+const page = async () => {
+  const data = await auth.api.getSession({
+    headers: await headers()
+  })
+  if (data?.session) {
+    redirect('/dashboard/monitors')
+  }
   return (
     <>
+
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}

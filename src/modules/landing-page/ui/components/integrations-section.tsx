@@ -1,6 +1,14 @@
 "use client";
 import { motion } from "framer-motion";
-import { Mail, MessageSquare, Slack, Webhook, Zap, Shield, LucideSlack } from "lucide-react";
+import {
+  Mail,
+  MessageSquare,
+  Slack,
+  Webhook,
+  Zap,
+  Shield,
+  LucideSlack,
+} from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { FloatingDock } from "@/components/ui/floating-dock";
 import { IoIosMail } from "react-icons/io";
@@ -13,7 +21,7 @@ const integrationsChannels = [
   { title: "Slack", icon: <FaSlack className="w-full h-full" /> },
   { title: "Discord", icon: <FaDiscord className="w-full h-full" /> },
   { title: "Webhook", icon: <MdOutlineWebhook className="w-full h-full" /> },
-]
+];
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -38,7 +46,10 @@ const itemVariants = {
 
 export default function IntegrationsSection() {
   return (
-    <section id="integrations" className="py-24 px-4 relative overflow-hidden  max-w-7xl mx-auto">
+    <section
+      id="integrations"
+      className="py-24 px-4 relative overflow-hidden  max-w-7xl mx-auto"
+    >
       <div className="container mx-auto relative z-10 flex flex-col items-center justify-center gap-3">
         <Badge className=" bg-green-600/20   my-3  light:text-black backdrop:blur-xl  rounded-full">
           Integrations
@@ -59,12 +70,20 @@ export default function IntegrationsSection() {
           </p>
         </motion.div>
 
-        <div className=" flex items-center justify-center">
-          <FloatingDock
-            items={integrationsChannels}
-
-          />
-        </div>
+        <motion.div
+          className=" flex items-center justify-center"
+          initial={{ opacity: 0, scale: 0.8 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
+        >
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.3 }}
+          >
+            <FloatingDock items={integrationsChannels} />
+          </motion.div>
+        </motion.div>
       </div>
     </section>
   );

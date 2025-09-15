@@ -1,9 +1,8 @@
 "use client";
 import { Badge } from "@/components/ui/badge";
-import PricingCard from "@/modules/pricing/ui/components/pricing-card";
 import { motion } from "framer-motion";
+import PricingCard from "./pricing-card";
 // adjust path
-
 
 const plans = [
   {
@@ -80,14 +79,10 @@ const cardVariants = {
   },
 };
 
-export default function PricingSection({
-
-}: {
-
-  }) {
+export default function PricingSection({ }: {}) {
   return (
-    <section id="pricing" className="py-24 px-4 relative overflow-hidden">
-      <div className="container mx-auto relative z-10">
+    <section id="pricing" className="py-24 px-8 relative overflow-hidden">
+      <div className="container mx-auto   relative z-10">
         <Badge className=" bg-green-600/20   my-3  light:text-black backdrop:blur-xl block   mx-auto rounded-full">
           Pricing
         </Badge>
@@ -114,10 +109,14 @@ export default function PricingSection({
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="grid grid-cols-1  lg:grid-cols-3 gap-8 "
+          className=" flex flex-wrap gap-8 justify-center w-full  "
         >
           {plans.map((plan) => (
-            <motion.div key={plan.name} variants={cardVariants} >
+            <motion.div
+              key={plan.name}
+              variants={cardVariants}
+              className=" shrink-0  max-w-sm w-full"
+            >
               <PricingCard
                 name={plan.name}
                 description={plan.description}
