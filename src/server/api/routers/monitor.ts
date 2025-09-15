@@ -93,7 +93,6 @@ export const monitorRouter = createTRPCRouter({
             fill: fill[item.status as keyof typeof fill]
         }))
 
-        const cuttOffDate = new Date(Date.now() - 24 * 60 * 60 * 1000)
         const [last24HoursData] = await db
             .select({
                 upMonitors: sql<number>`count(*) filter (where ${monitor.status} = 'up')`,
@@ -102,7 +101,7 @@ export const monitorRouter = createTRPCRouter({
                 totalMonitors: count()
             })
             .from(monitor)
-            .where(and(eq(monitor.userId, ctx.user.id), gt(monitor.createdAt, cuttOffDate)));
+            .where(and(eq(monitor.userId, ctx.user.id)));
 
         return {
             statusData,

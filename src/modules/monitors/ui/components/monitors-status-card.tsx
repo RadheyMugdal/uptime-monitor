@@ -15,6 +15,7 @@ const chartConfig = {
 
 const MonitorsStatusCard = () => {
     const [statusData] = api.monitor.getMonitorsStatus.useSuspenseQuery()
+    console.log(statusData);
 
     const l24 = statusData.last24HoursData
     const up = l24?.upMonitors ?? 0
@@ -29,7 +30,7 @@ const MonitorsStatusCard = () => {
     return (
         <div className="grid grid-cols-2 gap-6">
             <Card className="gap-0 max-h-[300px]">
-                <CardHeader className="py-0 justify-center">Monitors Status Overview</CardHeader>
+                <CardHeader className="py-0 justify-center">Status Overview</CardHeader>
                 <CardContent>
                     <ChartContainer className="w-full max-h-44" config={chartConfig}>
                         <PieChart>
@@ -41,7 +42,7 @@ const MonitorsStatusCard = () => {
             </Card>
 
             <Card className="gap-0 max-h-[300px]">
-                <CardHeader className="py-0 justify-center">Last 24 Hours</CardHeader>
+                <CardHeader className="py-0 justify-center">Performance Summary</CardHeader>
                 <CardContent>
                     <div className="grid grid-cols-2 gap-6 py-4">
                         <div className="flex flex-col gap-2 items-center justify-center">
