@@ -15,8 +15,6 @@ const chartConfig = {
 
 const MonitorsStatusCard = () => {
     const [statusData] = api.monitor.getMonitorsStatus.useSuspenseQuery()
-    console.log(statusData);
-
     const l24 = statusData.last24HoursData
     const up = l24?.upMonitors ?? 0
     const down = l24?.downMonitors ?? 0

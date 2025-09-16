@@ -6,9 +6,18 @@ import Header from "./header";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { authClient } from "@/lib/authClient";
+import { useRouter } from "next/navigation";
 
 const Hero = () => {
   const { data } = authClient.useSession()
+  const router = useRouter()
+  const handleClick = () => {
+    if (data?.session) {
+      router.push('/dashboard/monitors')
+      return
+    }
+    router.push('/signin')
+  }
   return (
     <div className="w-screen min-h-screen relative">
       {/* Background */}
@@ -17,7 +26,7 @@ const Hero = () => {
       </div>
 
       <div className="relative w-full h-full z-20">
-        <Header isLoggedIn={!data?.session} />
+        <Header isLoggedIn={!!data?.session} />
         {/* Hero content */}
         <div className="flex flex-col gap-10 pt-44 items-center justify-center  px-8  w-full h-full">
           <motion.div
@@ -67,7 +76,9 @@ const Hero = () => {
               whileTap={{ scale: 0.95 }}
               transition={{ duration: 0.2 }}
             >
-              <Button>Start monitoring free</Button>
+              <Button onClick={handleClick}>{
+                !!data?.session ? "Go to Dashboard" : "Get Started Now"
+              }</Button>
             </motion.div>
             <motion.div
               whileHover={{ scale: 1.05 }}

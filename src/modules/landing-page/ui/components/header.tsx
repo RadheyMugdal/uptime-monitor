@@ -50,6 +50,7 @@ const Header = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
       router.push("/signin")
     }
   }
+
   return (
     <motion.header
       initial={{ opacity: 0, y: -20 }}
