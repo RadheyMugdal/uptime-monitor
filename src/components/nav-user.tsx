@@ -55,7 +55,11 @@ export function NavUser({
             >
               <Avatar className="h-8 w-8 rounded-lg">
                 <AvatarImage src={user.image || ""} alt={user.name} />
-                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                <AvatarFallback className="rounded-lg">
+                  {
+                    user.name.split(" ").map((name, index) => (name.charAt(0).toUpperCase())).join("")
+                  }
+                </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">{user.name}</span>
@@ -76,7 +80,11 @@ export function NavUser({
                   <AvatarImage src={user.image ||
                     ""
                   } alt={user.name} />
-                  <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                  <AvatarFallback className="rounded-lg ">
+                    {
+                      user.name.split(" ").map((name, index) => (name.charAt(0).toUpperCase())).join("")
+                    }
+                  </AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-medium">{user.name}</span>
@@ -84,7 +92,7 @@ export function NavUser({
                 </div>
               </div>
             </DropdownMenuLabel>
-            <DropdownMenuSeparator />
+            <DropdownMenuSeparator className="bg-foreground/20" />
             <DropdownMenuGroup>
               {
                 plan === "free" && (
@@ -107,7 +115,7 @@ export function NavUser({
                 Billing
               </DropdownMenuItem>
             </DropdownMenuGroup>
-            <DropdownMenuSeparator />
+            <DropdownMenuSeparator className="bg-foreground/10" />
             <DropdownMenuItem onClick={async () => {
               await authClient.signOut({
                 fetchOptions: {
