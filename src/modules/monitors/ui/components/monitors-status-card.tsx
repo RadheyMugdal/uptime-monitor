@@ -7,7 +7,7 @@ import { Pie, PieChart } from 'recharts'
 import { unknown } from 'zod'
 
 const chartConfig = {
-    up: { label: "Up", color: "#00ff00" },
+    up: { label: "Up", color: "#00c950" },
     down: { label: "Down", color: "red" },
     paused: { label: "Paused", color: "gray" },
     unknown: { label: "Unknown", color: "blue" },
@@ -26,7 +26,7 @@ const MonitorsStatusCard = () => {
     const uptimePct = active > 0 ? Math.round((up / total) * 100) : 0
 
     return (
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid md:grid-cols-2  gap-6">
             <Card className="gap-0 max-h-[300px]">
                 <CardHeader className="py-0 justify-center">Status Overview</CardHeader>
                 <CardContent>

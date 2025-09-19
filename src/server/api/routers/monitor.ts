@@ -78,10 +78,10 @@ export const monitorRouter = createTRPCRouter({
     }),
     getMonitorsStatus: protectedProcedure.query(async ({ ctx }) => {
         const fill = {
-            up: "green",
-            down: "red",
-            paused: "yellow",
-            unknown: "gray"
+            up: "#00c950",
+            down: "#fb2c36",
+            paused: "#f0b100",
+            unknown: "#27272a"
         }
         const statusDataRaw = await db.select({
             status: monitor.status,
