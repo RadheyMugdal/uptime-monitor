@@ -15,6 +15,13 @@
       "when": 1758376767116,
       "tag": "0001_fluffy_gorgon",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1758387646077,
+      "tag": "0002_even_doctor_faustus",
+      "breakpoints": true
     }
   ]
 }

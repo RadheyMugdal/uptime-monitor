@@ -89,6 +89,7 @@ export const monitor = pgTable("monitor", (t) => ({
 
 export const checkResult = pgTable("check_result", (t) => ({
 	id: t.uuid("id").primaryKey().defaultRandom(),
+	userId:text("user_id").notNull().references(() => user.id, { onDelete: "cascade" }),
 	monitorId: t.uuid("monitor_id").notNull().references(() => monitor.id, { onDelete: "cascade" }),
 	status: status("status").notNull(),
 	responseMs: t.integer("response_ms").notNull(),
