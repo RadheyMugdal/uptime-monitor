@@ -1,6 +1,8 @@
 import { pgEnum } from "drizzle-orm/pg-core";
 import { pgTable, text, timestamp, boolean } from "drizzle-orm/pg-core";
 
+export const planEnum=pgEnum("plan",["free","pro","business"])
+
 export const user = pgTable("user", {
 	id: text("id").primaryKey(),
 	name: text("name").notNull(),
@@ -9,6 +11,8 @@ export const user = pgTable("user", {
 		.$defaultFn(() => false)
 		.notNull(),
 	image: text("image"),
+	plan:planEnum("plan").notNull().default("free"),
+	subscriptionExpiresAt:timestamp("subscription_expires_at",{withTimezone:true}),
 	createdAt: timestamp("created_at")
 		.$defaultFn(() => /* @__PURE__ */ new Date())
 		.notNull(),
