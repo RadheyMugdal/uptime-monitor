@@ -162,7 +162,7 @@ export function SignupForm({
                                         <FormItem>
                                             <FormLabel>Password</FormLabel>
                                             <FormControl>
-                                                <PasswordInput type="password" {...field} />
+                                                <PasswordInput  {...field} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>

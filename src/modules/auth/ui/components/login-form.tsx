@@ -165,7 +165,7 @@ export function LoginForm({
                                                 </a>
                                             </div>
                                             <FormControl>
-                                                <PasswordInput type="password" {...field} />
+                                                <PasswordInput {...field} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
