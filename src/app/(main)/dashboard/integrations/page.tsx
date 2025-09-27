@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from "react";
+import { useState } from "react";
 import { api } from "@/trpc/react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -12,6 +12,7 @@ import { MdOutlineWebhook } from "react-icons/md";
 import { FaDiscord, FaSlack } from "react-icons/fa";
 import { IoIosMail } from "react-icons/io";
 import { Loader2, CheckCircle, XCircle } from "lucide-react";
+import Loader from "@/components/global/loader";
 
 const integrationsChannels = [
     { type: "email", label: "Email", logo: <IoIosMail /> },
@@ -26,7 +27,7 @@ const IntegrationsPage = () => {
     const [selectedChannel, setSelectedChannel] = useState<ChannelType>("email");
     const { data: integrations, isPending } = api.integration.getAll.useQuery();
 
-    if (isPending) return <div className="p-8">Loading integrations...</div>;
+    if (isPending) return <Loader loadingText='Loading integrations...' />;
 
     return (
         <>

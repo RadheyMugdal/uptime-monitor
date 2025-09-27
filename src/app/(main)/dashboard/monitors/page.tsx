@@ -1,3 +1,5 @@
+import ErrorFallback from "@/components/global/error-fallback";
+import Loader from "@/components/global/loader";
 import { auth } from "@/lib/auth";
 import { loadSearchParams } from "@/modules/monitors/param";
 import MonitorsView from "@/modules/monitors/ui/views/monitors-view";
@@ -28,8 +30,8 @@ export default async function Page({ searchParams }: Props) {
 
   return (
     <HydrateClient>
-      <Suspense fallback={<div>Loading...</div>}>
-        <ErrorBoundary fallback={<div>Error</div>}>
+      <Suspense fallback={<Loader loadingText='Loading monitors...' />}>
+        <ErrorBoundary fallback={<ErrorFallback error="Failed to load monitors. Please try again later." />}>
           <MonitorsView />
         </ErrorBoundary>
       </Suspense>

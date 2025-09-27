@@ -1,4 +1,6 @@
 
+import ErrorFallback from "@/components/global/error-fallback";
+import Loader from "@/components/global/loader";
 import CreateMonitorView from "@/modules/monitors/ui/views/create-monitor-view";
 import { api, HydrateClient } from "@/trpc/server";
 
@@ -11,8 +13,8 @@ const CreateMonitorPage = async () => {
 
   return (
     <HydrateClient>
-      <Suspense fallback={<div>Loading...</div>}>
-        <ErrorBoundary fallback={<div>Error</div>}>
+      <Suspense fallback={<Loader loadingText='Getting things ready to create your monitor...' />}>
+        <ErrorBoundary fallback={<ErrorFallback error="Unable to load monitor creation tools. Refresh the page and try again." />}>
           <CreateMonitorView />
         </ErrorBoundary>
       </Suspense>

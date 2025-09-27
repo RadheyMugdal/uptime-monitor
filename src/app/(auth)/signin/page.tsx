@@ -1,11 +1,12 @@
-import { LoginForm } from '@/modules/auth/ui/components/login-form'
-import React, { Suspense } from 'react'
+import Loader from '@/components/global/loader';
+import { LoginForm } from '@/modules/auth/ui/components/login-form';
+import { Suspense } from 'react';
 
 const SignInPage = () => {
     return (
         <div className='w-screen h-screen'>
-            <Suspense fallback={<div>Loading...</div>}>
-            <LoginForm />
+            <Suspense fallback={<Loader />}>
+                <LoginForm />
             </Suspense>
         </div>
     )
