@@ -1,21 +1,19 @@
-'use client'
+'use client';
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-import { zodResolver } from "@hookform/resolvers/zod"
-
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
     Card,
     CardContent,
     CardDescription,
     CardHeader,
     CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import Link from "next/link"
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import Link from "next/link";
 import {
     Form,
     FormField,
@@ -23,11 +21,13 @@ import {
     FormLabel,
     FormControl,
     FormMessage,
-} from "@/components/ui/form"
-import { authClient } from "@/lib/authClient"
-import { toast } from "sonner"
-import { useRouter } from "next/navigation"
-import { PasswordInput } from "@/components/ui/password-input"
+} from "@/components/ui/form";
+import { FaGithub } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
+import { authClient } from "@/lib/authClient";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { PasswordInput } from "@/components/ui/password-input";
 
 const formSchema = z.object({
     email: z.string().email("Invalid email address"),
@@ -111,7 +111,7 @@ export function SignupForm({
                                         }
                                     )
                                 }}>
-                                    {/* Replace with Google icon */}
+                                    <FcGoogle />
                                     Login with Google
                                 </Button>
                                 <Button variant="outline" className="w-full" type="button" onClick={async () => {
@@ -129,7 +129,7 @@ export function SignupForm({
                                         }
                                     )
                                 }}>
-                                    {/* Replace with GitHub icon */}
+                                    <FaGithub />
                                     Login with Github
                                 </Button>
                             </div>

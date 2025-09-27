@@ -1,19 +1,19 @@
-'use client';
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import * as z from "zod"
+'use client';;
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
 
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
     Card,
     CardContent,
     CardDescription,
     CardHeader,
     CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import Link from "next/link"
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import Link from "next/link";
 
 import {
     Form,
@@ -22,12 +22,13 @@ import {
     FormLabel,
     FormControl,
     FormMessage,
-} from "@/components/ui/form"
-import { authClient } from "@/lib/authClient"
-import { toast } from "sonner"
-import { useRouter, useSearchParams } from "next/navigation"
+} from "@/components/ui/form";
+import { authClient } from "@/lib/authClient";
+import { toast } from "sonner";
+import { useRouter, useSearchParams } from "next/navigation";
 import { PasswordInput } from "@/components/ui/password-input";
-
+import { FcGoogle } from "react-icons/fc";
+import { FaGithub } from "react-icons/fa";
 // 1. Define validation schema
 const formSchema = z.object({
     email: z.string().email("Invalid email address"),
@@ -103,7 +104,7 @@ export function LoginForm({
                                         )
                                     }}
                                 >
-                                    {/* Replace with actual Google Icon */}
+                                    <FcGoogle />
                                     Login with Google
                                 </Button>
                                 <Button variant="outline" className="w-full" type="button"
@@ -123,7 +124,7 @@ export function LoginForm({
                                         )
                                     }}
                                 >
-                                    {/* Replace with actual GitHub Icon */}
+                                    <FaGithub />
                                     Login with Github
                                 </Button>
                             </div>
