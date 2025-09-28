@@ -1,8 +1,13 @@
-import Link from "next/link"
+import Link from "next/link";
+import DarkVeil from "@/components/DarkVeil";
+
 
 const AuthLayout = ({ children }: { children: React.ReactNode }) => {
     return (
         <div className=" h-screen w-screen relative">
+            <div className="absolute top-0 left-0 w-full h-[800px]   -z-10">
+                <DarkVeil />
+            </div>
             <Link href="/" className=" absolute top-4 left-4 flex items-center gap-1">
                 <div className=" flex  flex-1  text-left text-lg  items-center gap-1 font-semibold leading-tight">
                     <svg
