@@ -92,11 +92,10 @@ const Hero = () => {
           </motion.div>
 
           <motion.div
-            className=" p-1 bg-primary/60 backdrop:blur-lg border mt-20 rounded-xl"
+            className=" p-1  mt-20 rounded-xl"
             initial={{ opacity: 0, y: 50, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 1, delay: 1, ease: "easeOut" }}
-            whileHover={{ scale: 1.02 }}
           >
             <Image
               src="/product.png"
