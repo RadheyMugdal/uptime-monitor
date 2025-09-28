@@ -12,7 +12,6 @@ import { authClient } from "@/lib/authClient";
 import { Check } from "lucide-react";
 import React from "react";
 import { motion } from "framer-motion";
-import { getPlanButtonState } from "@/modules/pricing/util";
 interface Props {
     name: string;
     description: string;
@@ -56,8 +55,9 @@ const PricingCard: React.FC<Props> = ({
                         initial={{ scale: 0, rotate: -10 }}
                         animate={{ scale: 1, rotate: 0 }}
                         transition={{ duration: 0.5, delay: 0.2, type: "spring" }}
+                        className="absolute right-4 top-4"
                     >
-                        <Badge className="absolute right-4 top-4 bg-green-600/20   light:text-black backdrop:blur-3xl">
+                        <Badge className=" bg-green-600/20   light:text-black backdrop:blur-3xl">
                             🔥Popular
                         </Badge>
                     </motion.div>
