@@ -92,15 +92,6 @@ export function LoginForm({
                                             provider: "google",
                                             callbackURL: '/dashboard/monitors'
                                         },
-                                            {
-                                                onSuccess: () => {
-                                                    router.push('/dashboard/monitors')
-
-                                                },
-                                                onError: (error) => {
-                                                    toast.error(error.error.message || error.error.statusText)
-                                                }
-                                            }
                                         )
                                     }}
                                 >
@@ -111,16 +102,8 @@ export function LoginForm({
                                     onClick={async () => {
                                         await authClient.signIn.social({
                                             provider: "github",
-                                        },
-                                            {
-                                                onSuccess: () => {
-                                                    router.push('/dashboard/monitors')
-
-                                                },
-                                                onError: (error) => {
-                                                    toast.error(error.error.message || error.error.statusText)
-                                                }
-                                            }
+                                            callbackURL: '/dashboard/monitors'
+                                        }
                                         )
                                     }}
                                 >
