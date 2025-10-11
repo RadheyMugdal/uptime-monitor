@@ -2,7 +2,6 @@ import "@/styles/globals.css";
 
 import type { Metadata } from "next";
 import { TRPCReactProvider } from "@/trpc/react";
-import { ThemeProvider } from "@/components/theme-provider";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Toaster } from "sonner";
 import { Nunito } from "next/font/google";
@@ -93,15 +92,8 @@ export default function RootLayout({
       <meta name="apple-mobile-web-app-title" content="UptimeWatch" />
       <body>
         <NuqsAdapter>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="dark"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <TRPCReactProvider>{children}</TRPCReactProvider>
-            <Toaster />
-          </ThemeProvider>
+          <TRPCReactProvider>{children}</TRPCReactProvider>
+          <Toaster />
         </NuqsAdapter>
       </body>
     </html>
