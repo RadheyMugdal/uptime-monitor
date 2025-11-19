@@ -1,29 +1,63 @@
-# Create T3 App
+# Uptime Monitor - Web Dashboard
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+This is the main web application for the Uptime Monitor project. It provides the user interface for managing monitors, viewing status pages, and handling incidents.
 
-## What's next? How do I make an app with this?
+## 🛠️ Tech Stack
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+-   **Framework**: [Next.js 15](https://nextjs.org/) (App Router)
+-   **Language**: TypeScript
+-   **Styling**: Tailwind CSS, Shadcn UI
+-   **Database ORM**: Drizzle ORM
+-   **API**: tRPC
+-   **Authentication**: Better Auth / Polar.sh
+-   **State Management**: TanStack Query
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+## 🚀 Getting Started
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+### Prerequisites
 
-## Learn More
+-   Node.js (v18+)
+-   PostgreSQL database
+-   npm / pnpm / bun
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+### Installation
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+1.  Install dependencies:
+    ```bash
+    npm install
+    ```
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+2.  Set up environment variables:
+    Create a `.env` file in this directory. You can use `.env.example` if available as a reference.
+    
+    Required variables typically include:
+    ```env
+    DATABASE_URL="postgresql://..."
+    # Auth and other service secrets
+    ```
 
-## How do I deploy this?
+### Database Setup
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+This project uses Drizzle ORM. You can manage the database schema using the following commands:
+
+-   **Generate migrations**: `npm run db:generate`
+-   **Push schema changes**: `npm run db:push`
+-   **Open Drizzle Studio**: `npm run db:studio`
+
+### Development
+
+Start the development server:
+
+```bash
+npm run dev
+```
+
+The application will be available at `http://localhost:3000`.
+
+## 📜 Scripts
+
+-   `dev`: Start the development server with Turbo.
+-   `build`: Build the application for production.
+-   `start`: Start the production server.
+-   `lint`: Run Biome check.
+-   `typecheck`: Run TypeScript type checking.
