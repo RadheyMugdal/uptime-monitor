@@ -19,7 +19,7 @@ const Hero = () => {
     router.push('/signin')
   }
   return (
-    <div className="w-screen min-h-screen relative">
+    <div className="w-full min-h-screen relative">
       {/* Background */}
       <div className="absolute top-0 left-0 w-full h-[800px]   z-10">
         <DarkVeil />
