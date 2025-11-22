@@ -6,5 +6,5 @@ export const polarClient = new Polar({
     // Remember that access tokens, products, etc. are completely separated between environments.
 
     // Access tokens obtained in Production are for instance not usable in the Sandbox environment.
-    server: 'sandbox'
+    server: 'production'
 });

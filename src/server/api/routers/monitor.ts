@@ -76,6 +76,14 @@ export const monitorRouter = createTRPCRouter({
         }
 
     }),
+    getMonitorsList: protectedProcedure.query(async ({ ctx }) => {
+        const monitors = await db.select({
+            id: monitor.id,
+            name: monitor.name,
+            url: monitor.url,
+        }).from(monitor).where(eq(monitor.userId, ctx.user.id));
+        return monitors;
+    }),
     getMonitorsStatus: protectedProcedure.query(async ({ ctx }) => {
         const fill = {
             up: "#00c950",

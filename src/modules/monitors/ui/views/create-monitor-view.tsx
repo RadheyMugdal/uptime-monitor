@@ -102,10 +102,10 @@ const CreateMonitorView = () => {
                     </Breadcrumb>
                 </div>
             </header>
-            <div className="flex  flex-1 overflow-y-scroll flex-col gap-4 p-4 pt-0">
+            <div className="flex  flex-1 overflow-y-scroll flex-col gap-4 p-6 pt-2">
                 <h1 className='text-2xl font-semibold'>Create Monitor</h1>
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit(handleSubmit)} className='  space-y-4'>
+                    <form onSubmit={form.handleSubmit(handleSubmit)} className=' bg-card/60  rounded-md p-6  space-y-4'>
                         <div className='grid grid-cols-2 items-start w-[50%] gap-2'>
                             <FormField
                                 control={form.control}

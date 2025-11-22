@@ -3,6 +3,7 @@ import { monitorRouter } from "./routers/monitor";
 import { incidentRouter } from "./routers/incident";
 import { integrationRouter } from "./routers/integration";
 import { pricingRouter } from "./routers/pricing";
+import { statusPageRouter } from "./routers/status-page";
 
 /**
  * This is the primary router for your server.
@@ -13,7 +14,8 @@ export const appRouter = createTRPCRouter({
 	monitor: monitorRouter,
 	incident: incidentRouter,
 	integration: integrationRouter,
-	pricing: pricingRouter
+	pricing: pricingRouter,
+	statusPage: statusPageRouter
 });
 
 // export type definition of API

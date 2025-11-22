@@ -6,6 +6,7 @@ import {
   Siren,
   SquareTerminal,
   TriangleAlert,
+  Globe,
 } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
@@ -41,6 +42,12 @@ const data = {
       title: "integrations",
       url: "/dashboard/integrations",
       icon: Plug,
+      isActive: true,
+    },
+    {
+      title: "Status Pages",
+      url: "/dashboard/status-pages",
+      icon: Globe,
       isActive: true,
     },
     // {
