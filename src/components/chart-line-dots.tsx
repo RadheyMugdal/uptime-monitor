@@ -1,9 +1,9 @@
 "use client"
 
-import { Area, CartesianGrid, Line, LineChart } from "recharts"
+import { CartesianGrid, Line, LineChart } from "recharts"
 
 import {
-    ChartConfig,
+    type ChartConfig,
     ChartContainer
 } from "@/components/ui/chart"
 
