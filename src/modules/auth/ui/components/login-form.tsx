@@ -75,9 +75,9 @@ export function LoginForm({
 
     return (
         <div className={cn("flex flex-col w-full h-full items-center justify-center gap-6", className)} {...props}>
-            <Card className="shrink-0 min-w-sm">
-                <CardHeader className="text-center">
-                    <CardTitle className="text-xl">Welcome back</CardTitle>
+            <Card className="shrink-0 min-w-sm mt-12 border-none shadow-none  bg-background">
+                <CardHeader >
+                    <CardTitle >Welcome back</CardTitle>
                     <CardDescription>
                         Login with your Google or Github account
                     </CardDescription>

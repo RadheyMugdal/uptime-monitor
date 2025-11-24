@@ -1,5 +1,5 @@
 "use client";
-import { motion, type Variant } from "framer-motion";
+import { motion, type Variant } from "motion/react";
 import { PiTimerBold } from "react-icons/pi";
 import { MdDashboard, MdOutlineAutoGraph, MdWeb } from "react-icons/md";
 import { AiOutlineNotification } from "react-icons/ai";
@@ -30,27 +30,18 @@ const itemVariants = {
 
 export default function FeaturesSection() {
   return (
-    <section className="py-24 px-8 max-w-7xl mx-auto">
+    <section id="features" className="py-24 px-8 space-y-32 max-w-7xl mx-auto">
       {/* Header Section */}
       <motion.div
-        className="text-center mb-16"
+        className="text-center  my-8"
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
       >
-        <motion.div
-          initial={{ opacity: 0, y: 20, scale: 0.9 }}
-          whileInView={{ opacity: 1, y: 0, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-        >
-          <Badge className=" bg-green-600/20   my-3  light:text-black backdrop:blur-xl  rounded-full">
-            Features
-          </Badge>
-        </motion.div>
+        <span>features</span>
         <motion.h2
-          className="text-3xl md:text-4xl font-bold mb-6"
+          className="text-3xl md:text-5xl font-medium mb-6"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -59,7 +50,7 @@ export default function FeaturesSection() {
           Everything you need to stay online
         </motion.h2>
         <motion.p
-          className="lg:text-lg opacity-75 max-w-3xl mx-auto"
+          className=" opacity-60  max-w-xl mx-auto"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -71,7 +62,7 @@ export default function FeaturesSection() {
       </motion.div>
 
       <motion.div
-        className="grid md:grid-cols-3 gap-8"
+        className="grid md:grid-cols-3 gap-4"
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
@@ -79,7 +70,7 @@ export default function FeaturesSection() {
       >
         {/* Feature 1: Global Latency Monitoring */}
         <motion.div
-          className="group border md:col-span-2 rounded-2xl bg-secondary/20 before:size-52 before:-right-20 before:-top-[30%] before:rounded-full before:bg-primary/50 before:absolute before:-z-10 before:content-[''] before:blur-3xl overflow-hidden relative backdrop:blur-lg hover:border-primary/50 transition-colors duration-500"
+          className="group border  rounded-none md:col-span-2  bg-secondary/20 before:size-52 before:-right-20 before:-top-[30%] before:rounded-full before:bg-primary/50 before:absolute before:-z-10 before:content-[''] before:blur-3xl overflow-hidden relative backdrop:blur-lg hover:border-primary/50 transition-colors duration-500"
           variants={itemVariants}
           whileHover="hover"
         >
@@ -90,7 +81,7 @@ export default function FeaturesSection() {
                   <div className="w-fit">
                     <MdOutlineAutoGraph className="size-10 bg-accent p-2 rounded-md" />
                   </div>
-                  <h3 className="text-3xl font-bold">Global Latency Monitoring</h3>
+                  <h3 className="text-3xl">Global Latency Monitoring</h3>
                 </div>
                 <p className="opacity-75 text-pretty">
                   Track response times from multiple regions worldwide. Identify
@@ -162,7 +153,7 @@ export default function FeaturesSection() {
 
         {/* Feature 2: SSL & Domain Health */}
         <motion.div
-          className="group border rounded-2xl bg-secondary/20 before:size-52 before:-right-20 before:-bottom-[30%] before:rounded-full before:bg-primary/50 before:absolute before:-z-10 before:content-[''] before:blur-3xl overflow-hidden relative backdrop:blur-lg hover:border-primary/50 transition-colors duration-500"
+          className="group border rounded-none bg-secondary/20 before:size-52 before:-right-20 before:-bottom-[30%] before:rounded-full before:bg-primary/50 before:absolute before:-z-10 before:content-[''] before:blur-3xl overflow-hidden relative backdrop:blur-lg hover:border-primary/50 transition-colors duration-500"
           variants={itemVariants}
           whileHover="hover"
         >
@@ -174,7 +165,7 @@ export default function FeaturesSection() {
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
                   </div>
                 </div>
-                <h3 className="text-2xl font-bold">SSL Monitoring</h3>
+                <h3 className="text-2xl ">SSL Monitoring</h3>
               </div>
               <p className="opacity-75 text-sm text-pretty">
                 Never let a certificate expire. Get notified 30, 14, and 7 days before expiration.
@@ -218,7 +209,7 @@ export default function FeaturesSection() {
 
         {/* Feature 3: Root Cause Analysis */}
         <motion.div
-          className="group border rounded-2xl bg-secondary/20 before:size-52 before:-right-20 before:-bottom-[30%] before:rounded-full before:bg-primary/50 before:absolute before:-z-10 before:content-[''] before:blur-3xl overflow-hidden relative backdrop:blur-lg hover:border-primary/50 transition-colors duration-500"
+          className="group border rounded-none bg-secondary/20 before:size-52 before:-right-20 before:-bottom-[30%] before:rounded-full before:bg-primary/50 before:absolute before:-z-10 before:content-[''] before:blur-3xl overflow-hidden relative backdrop:blur-lg hover:border-primary/50 transition-colors duration-500"
           variants={itemVariants}
           whileHover="hover"
         >
@@ -230,7 +221,7 @@ export default function FeaturesSection() {
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="4 17 10 11 4 5" /><line x1="12" x2="20" y1="19" y2="19" /></svg>
                   </div>
                 </div>
-                <h3 className="text-2xl font-bold">Root Cause Analysis</h3>
+                <h3 className="text-2xl">Root Cause Analysis</h3>
               </div>
               <p className="opacity-75 text-sm text-pretty">
                 Don't just know it's down. See headers, error codes, and traceroutes.
@@ -271,7 +262,7 @@ export default function FeaturesSection() {
 
         {/* Feature 4: Multi-Channel Alerts */}
         <motion.div
-          className="group border md:col-span-2 rounded-2xl bg-secondary/20 before:size-52 before:-right-20 before:-top-[30%] before:rounded-full before:bg-primary/50 before:absolute before:-z-10 before:content-[''] before:blur-3xl overflow-hidden relative backdrop:blur-lg hover:border-primary/50 transition-colors duration-500"
+          className="group border md:col-span-2 rounded-none bg-secondary/20 before:size-52 before:-right-20 before:-top-[30%] before:rounded-full before:bg-primary/50 before:absolute before:-z-10 before:content-[''] before:blur-3xl overflow-hidden relative backdrop:blur-lg hover:border-primary/50 transition-colors duration-500"
           variants={itemVariants}
           whileHover="hover"
         >
@@ -282,7 +273,7 @@ export default function FeaturesSection() {
                   <div className="w-fit">
                     <IoMdNotifications className="size-10 bg-accent p-2 rounded-md" />
                   </div>
-                  <h3 className="text-3xl font-bold">Multi-Channel Alerts</h3>
+                  <h3 className="text-3xl ">Multi-Channel Alerts</h3>
                 </div>
                 <p className="opacity-75 text-pretty">
                   Get notified where you work. Integrate seamlessly with Slack, Discord, Teams, Email, and custom webhooks.
@@ -348,7 +339,7 @@ export default function FeaturesSection() {
 
         {/* Feature 5: Status Pages */}
         <motion.div
-          className="group border md:col-span-3 rounded-2xl bg-secondary/20 before:size-52 before:-left-20 before:-bottom-[30%] before:rounded-full before:bg-primary/50 before:absolute before:-z-10 before:content-[''] before:blur-3xl overflow-hidden relative backdrop:blur-lg hover:border-primary/50 transition-colors duration-500"
+          className="group border md:col-span-3 rounded-none bg-secondary/20 before:size-52 before:-left-20 before:-bottom-[30%] before:rounded-full before:bg-primary/50 before:absolute before:-z-10 before:content-[''] before:blur-3xl overflow-hidden relative backdrop:blur-lg hover:border-primary/50 transition-colors duration-500"
           variants={itemVariants}
           whileHover="hover"
         >
@@ -358,13 +349,13 @@ export default function FeaturesSection() {
                 <div className="w-fit">
                   <MdWeb className="size-10 bg-accent p-2 rounded-md" />
                 </div>
-                <h3 className="text-3xl font-bold">Public Status Pages</h3>
+                <h3 className="text-3xl ">Public Status Pages</h3>
               </div>
               <p className="opacity-75 text-pretty max-w-2xl">
                 Build trust with your users by showcasing your service reliability.
                 Create beautiful, branded public status pages that keep your customers informed during incidents and maintenance.
               </p>
-              <ul className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
+              <ul className=" flex flex-col gap-2 mt-2">
                 <li className="flex gap-2 items-center">
                   <MdDashboard className="text-primary" />
                   Custom branding & domains
@@ -432,99 +423,6 @@ export default function FeaturesSection() {
         </motion.div>
       </motion.div>
 
-      {/* Stats Section */}
-      <motion.div
-        className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-8 text-center"
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6, delay: 0.2 }}
-      >
-        <motion.div
-          className="space-y-2"
-          whileHover={{ scale: 1.05 }}
-          transition={{ duration: 0.2 }}
-        >
-          <motion.div
-            className="text-2xl lg:text-4xl font-bold"
-            initial={{ scale: 0 }}
-            whileInView={{ scale: 1 }}
-            viewport={{ once: true }}
-            transition={{
-              duration: 0.5,
-              delay: 0.3,
-              type: "spring",
-              stiffness: 200,
-            }}
-          >
-            99.99%
-          </motion.div>
-          <div className="opacity-75 text-sm md:text-lg">Monitoring Uptime</div>
-        </motion.div>
-        <motion.div
-          className="space-y-2"
-          whileHover={{ scale: 1.05 }}
-          transition={{ duration: 0.2 }}
-        >
-          <motion.div
-            className="text-2xl lg:text-4xl font-bold"
-            initial={{ scale: 0 }}
-            whileInView={{ scale: 1 }}
-            viewport={{ once: true }}
-            transition={{
-              duration: 0.5,
-              delay: 0.4,
-              type: "spring",
-              stiffness: 200,
-            }}
-          >
-            &lt;15s
-          </motion.div>
-          <div className="opacity-75 text-sm md:text-lg">Detection Time</div>
-        </motion.div>
-        <motion.div
-          className="space-y-2"
-          whileHover={{ scale: 1.05 }}
-          transition={{ duration: 0.2 }}
-        >
-          <motion.div
-            className="text-2xl lg:text-4xl font-bold"
-            initial={{ scale: 0 }}
-            whileInView={{ scale: 1 }}
-            viewport={{ once: true }}
-            transition={{
-              duration: 0.5,
-              delay: 0.5,
-              type: "spring",
-              stiffness: 200,
-            }}
-          >
-            24/7
-          </motion.div>
-          <div className="opacity-75 text-sm md:text-lg">Global Coverage</div>
-        </motion.div>
-        <motion.div
-          className="space-y-2"
-          whileHover={{ scale: 1.05 }}
-          transition={{ duration: 0.2 }}
-        >
-          <motion.div
-            className="text-2xl lg:text-4xl font-bold"
-            initial={{ scale: 0 }}
-            whileInView={{ scale: 1 }}
-            viewport={{ once: true }}
-            transition={{
-              duration: 0.5,
-              delay: 0.6,
-              type: "spring",
-              stiffness: 200,
-            }}
-          >
-            4
-          </motion.div>
-          <div className="opacity-75 text-sm md:text-lg">Integrations</div>
-        </motion.div>
-      </motion.div>
     </section>
   );
 }

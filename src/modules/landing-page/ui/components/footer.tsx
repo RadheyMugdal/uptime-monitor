@@ -1,162 +1,124 @@
 "use client";
-import { motion } from "framer-motion";
+
 import Link from "next/link";
 import {
-  Monitor,
-  Mail,
-  MessageSquare,
   Twitter,
   Github,
   Linkedin,
-  ArrowUp,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { motion } from "motion/react";
 
-const footerLinks = {
-  Product: [
-    { name: "Features", href: "#features" },
-    { name: "Pricing", href: "#pricing" },
-    { name: "Integrations", href: "#integrations" },
-    { name: "API", href: "#" },
-    { name: "Status Page", href: "#" },
-  ],
-
-  Support: [
-    { name: "Help Center", href: "#" },
-    { name: "Documentation", href: "#" },
-    { name: "Community", href: "#" },
-    { name: "System Status", href: "#" },
-    { name: "Security", href: "#" },
-  ],
-  Legal: [
-    { name: "Privacy Policy", href: "#" },
-    { name: "Terms of Service", href: "#" },
-    { name: "Cookie Policy", href: "#" },
-  ],
-};
+const footerLinks = [
+  { name: "Features", href: "#features" },
+  { name: "Pricing", href: "#pricing" },
+  { name: "Status Page", href: "#" },
+  { name: "Contact", href: "#" },
+];
 
 const socialLinks = [
   { icon: Twitter, href: "https://twitter.com", label: "Twitter" },
   { icon: Github, href: "https://github.com", label: "GitHub" },
   { icon: Linkedin, href: "https://linkedin.com", label: "LinkedIn" },
-  { icon: Mail, href: "mailto:hello@uptimemonitor.com", label: "Email" },
 ];
-
-const scrollToTop = () => {
-  window.scrollTo({ top: 0, behavior: "smooth" });
-};
 
 export default function Footer() {
   return (
-    <footer className=" border-t  relative overflow-hidden  max-w-7xl mx-auto">
+    <motion.footer
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true }}
+      variants={{
+        hidden: { opacity: 0 },
+        visible: { opacity: 1, transition: { staggerChildren: 0.2 } }
+      }}
+      className="py-10 w-full max-w-7xl mx-auto px-4 md:px-6"
+    >
+      {/* Separator */}
+      <motion.div
+        variants={{
+          hidden: { scaleX: 0, originX: 0 },
+          visible: { scaleX: 1, originX: 0, transition: { duration: 0.8, ease: "easeOut" } }
+        }}
+        className="w-full h-px bg-border/50 mb-10"
+      />
 
-      <div className="container mx-auto relative z-10">
-        {/* Main Footer Content */}
-        <div className="py-16 px-4">
-          <div className=" flex  flex-col md:flex-row  justify-between gap-12 ">
-            {/* Brand Section */}
-            <div className="lg:col-span-2">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-                className="space-y-6"
-              >
-
-
-                <div className=" flex  flex-1  text-left text-2xl items-center gap-1 font-semibold leading-tight">
-                  <svg xmlns="http://www.w3.org/2000/svg" width={35} height={35} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-alarm-average"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M5 13a7 7 0 1 0 14 0a7 7 0 0 0 -14 0" /><path d="M7 4l-2.75 2" /><path d="M17 4l2.75 2" /><path d="M8 13h1l2 3l2 -6l2 3h1" /></svg>
-                  <div>
-                    <span>
-                      Uptime
-                    </span>
-                    <span className="font-bold">
-                      Watch
-                    </span>
-                  </div>
-                </div>
-
-                <p className=" opacity-75 max-w-md">
-                  The most reliable uptime monitoring service for your websites,
-                  APIs, and services. Never miss a downtime again.
-                </p>
-                <div className="flex space-x-4">
-                  {socialLinks.map((social) => (
-                    <Link
-                      key={social.label}
-                      href={social.href}
-                      className=" transition-colors"
-                      aria-label={social.label}
-                    >
-                      <social.icon className="size-4  hover:opacity-75 transition-colors" />
-                    </Link>
-                  ))}
-                </div>
-              </motion.div>
-            </div>
-
-            <div className=" grid  grid-cols-1 md:grid-cols-3 gap-12">
-              {/* Links Sections */}
-              {Object.entries(footerLinks).map(
-                ([category, links], categoryIndex) => (
-                  <motion.div
-                    key={category}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: categoryIndex * 0.1 }}
-                    className="space-y-4"
-                  >
-                    <h3 className="text-lg font-semibold ">
-                      {category}
-                    </h3>
-                    <ul className="space-y-3">
-                      {links.map((link) => (
-                        <li key={link.name}>
-                          <Link
-                            href={link.href}
-                            className=" opacity-75 hover:opacity-100 transition-colors text-sm"
-                          >
-                            {link.name}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  </motion.div>
-                )
-              )}
-
-            </div>
-          </div>
+      <motion.div
+        variants={{
+          hidden: { opacity: 0, y: 20 },
+          visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+        }}
+        className="flex flex-col md:flex-row justify-between items-center gap-8"
+      >
+        {/* Left: Links */}
+        <div className="flex flex-wrap justify-center md:justify-start gap-x-8 gap-y-4">
+          {footerLinks.map((link) => (
+            <Link
+              key={link.name}
+              href={link.href}
+              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+            >
+              {link.name}
+            </Link>
+          ))}
         </div>
 
-        {/* Bottom Bar */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="border-t border-slate-800 py-6 px-4"
-        >
-          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <div className=" opacity-75 text-sm">
-              © 2024 Uptime Monitor. All rights reserved.
-            </div>
-            <div className="flex items-center space-x-6 text-sm opacity-75">
-              <span>Made with ❤️ for developers</span>
-              <Button
-                onClick={scrollToTop}
-                variant="ghost"
-                size="sm"
-                className=" opacity-75 hover:opacity-100"
+        {/* Right: Logo & Version */}
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 font-semibold">
+            <div className="bg-primary text-primary-foreground p-1.5 rounded-lg">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width={20}
+                height={20}
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
               >
-                <ArrowUp className="w-4 h-4" />
-              </Button>
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M5 13a7 7 0 1 0 14 0a7 7 0 0 0 -14 0" />
+                <path d="M7 4l-2.75 2" />
+                <path d="M17 4l2.75 2" />
+                <path d="M8 13h1l2 3l2 -6l2 3h1" />
+              </svg>
             </div>
+            <span className="text-lg">UptimeWatch</span>
           </div>
-        </motion.div>
-      </div>
-    </footer>
+          <span className="px-2 py-0.5 rounded-full bg-muted text-xs font-medium text-muted-foreground">
+            v1.0
+          </span>
+        </div>
+      </motion.div>
+
+      {/* Bottom Row */}
+      <motion.div
+        variants={{
+          hidden: { opacity: 0, y: 20 },
+          visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+        }}
+        className="mt-10 flex flex-col md:flex-row justify-between items-center gap-4"
+      >
+        <p className="text-sm text-muted-foreground">
+          © {new Date().getFullYear()} UptimeWatch. All rights reserved.
+        </p>
+
+        {/* Social Buttons */}
+        <div className="flex items-center gap-4">
+          {socialLinks.map((social) => (
+            <Link
+              key={social.label}
+              href={social.href}
+              className="text-muted-foreground hover:text-foreground transition-colors p-2 hover:bg-muted rounded-full"
+              aria-label={social.label}
+            >
+              <social.icon className="size-5" />
+            </Link>
+          ))}
+        </div>
+      </motion.div>
+    </motion.footer>
   );
 }
+
