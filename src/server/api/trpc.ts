@@ -133,8 +133,13 @@ export const premiumProcedure = protectedProcedure.use(async ({ ctx, next }) => 
 	const plan = await auth.api.state({
 		headers: ctx.headers
 	})
-	const subscription = await polarClient.products.get({ id: plan.activeSubscriptions[0]?.productId as string })
-	const currentPlanName = subscription?.name.toLowerCase() as "pro" | "business" || "free"
+	const productId = plan.activeSubscriptions[0]?.productId
+	let currentPlanName: "pro" | "business" | "free" = "free"
+
+	if (productId) {
+		const subscription = await polarClient.products.get({ id: productId })
+		currentPlanName = (subscription?.name.toLowerCase() as "pro" | "business") || "free"
+	}
 
 	return next({
 		ctx: {
