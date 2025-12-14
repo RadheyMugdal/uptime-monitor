@@ -7,6 +7,7 @@ import { polarClient } from "./polar";
 import { eq } from "drizzle-orm";
 
 export const auth = betterAuth({
+    basePath: process.env.NEXT_PUBLIC_BASE_URL,
     plugins: [
         polar({
             client: polarClient,
@@ -18,29 +19,29 @@ export const auth = betterAuth({
                 portal(),
                 webhooks(
                     {
-                        secret:process.env.POLAR_WEBHOOK_SECRET!,
+                        secret: process.env.POLAR_WEBHOOK_SECRET!,
                         async onSubscriptionCreated(payload) {
-                            const plan=payload.data.product.name.toLowerCase() as "pro" |"business" || "free"
-                            const expiresAt=payload.data.endsAt
+                            const plan = payload.data.product.name.toLowerCase() as "pro" | "business" || "free"
+                            const expiresAt = payload.data.endsAt
                             await db.update(schema.user).set({
                                 plan,
-                                subscriptionExpiresAt:expiresAt
-                            }).where(eq(schema.user.id,payload.data.customer.externalId!))
+                                subscriptionExpiresAt: expiresAt
+                            }).where(eq(schema.user.id, payload.data.customer.externalId!))
                         },
                         async onSubscriptionUpdated(payload) {
-                            const plan=payload.data.product.name.toLowerCase() as "pro" |"business" || "free"
-                            const expiresAt=payload.data.endsAt
+                            const plan = payload.data.product.name.toLowerCase() as "pro" | "business" || "free"
+                            const expiresAt = payload.data.endsAt
                             await db.update(schema.user).set({
                                 plan,
-                                subscriptionExpiresAt:expiresAt
-                            }).where(eq(schema.user.id,payload.data.customer.externalId!))
+                                subscriptionExpiresAt: expiresAt
+                            }).where(eq(schema.user.id, payload.data.customer.externalId!))
                             return;
                         },
                         async onSubscriptionCanceled(payload) {
                             await db.update(schema.user).set({
-                                plan:"free",
-                                subscriptionExpiresAt:null
-                            }).where(eq(schema.user.id,payload.data.customer.externalId!))
+                                plan: "free",
+                                subscriptionExpiresAt: null
+                            }).where(eq(schema.user.id, payload.data.customer.externalId!))
                             return;
                         },
                     }
