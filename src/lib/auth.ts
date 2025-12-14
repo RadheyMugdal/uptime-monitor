@@ -7,7 +7,6 @@ import { polarClient } from "./polar";
 import { eq } from "drizzle-orm";
 
 export const auth = betterAuth({
-    basePath: process.env.NEXT_PUBLIC_BASE_URL,
     plugins: [
         polar({
             client: polarClient,

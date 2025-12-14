@@ -4,6 +4,5 @@ export const authClient = createAuthClient({
     plugins: [
         polarClient()
     ],
-    /** The base URL of the server (optional if you're using the same domain) */
-    baseURL: process.env.NEXT_PUBLIC_BASE_URL
+
 })
