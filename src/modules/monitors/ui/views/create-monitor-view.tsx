@@ -102,227 +102,236 @@ const CreateMonitorView = () => {
                     </Breadcrumb>
                 </div>
             </header>
-            <div className="flex  flex-1 overflow-y-scroll flex-col gap-4 p-6 pt-2">
-                <h1 className='text-2xl font-semibold'>Create Monitor</h1>
+            <div className="flex  flex-1  flex-col gap-4 p-5 pt-2">
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit(handleSubmit)} className=' bg-card/60  rounded-md p-6  space-y-4'>
-                        <div className='grid grid-cols-2 items-start w-[50%] gap-2'>
-                            <FormField
-                                control={form.control}
-                                name='name'
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>
-                                            Name
-                                        </FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                {...field}
-                                                placeholder='Enter monitor name'
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name='url'
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>
-                                            Url
-                                        </FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                {...field}
-                                                placeholder='https://example.com'
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                        </div>
-                        <FormField
-                            control={form.control}
-                            name="frequency"
-                            render={({ field }) => {
-                                return (
-                                    <FormItem>
-                                        <FormLabel>
-                                            Frequency
-                                        </FormLabel>
-                                        <FormControl>
-                                            <RadioGroup
-                                                onValueChange={field.onChange}
-                                                value={field.value}
-                                            >
-                                                <div className="flex gap-2">
-                                                    {['5', '10', '15'].map((value) => {
-                                                        const minutes = parseInt(value, 10)
-                                                        const disabled = minutes < limits.minFrequencyMinutes
+                    <form onSubmit={form.handleSubmit(handleSubmit)} className='  w-full h-full  rounded-md  space-y-8'>
+                        <div>
 
-                                                        return (
-                                                            <label
-                                                                key={value}
-                                                                htmlFor={value}
-                                                                className={cn(
-                                                                    "cursor-pointer px-8 rounded-md py-1 text-sm border",
-                                                                    field.value === value && "bg-secondary text-secondary-foreground",
-                                                                    disabled && "opacity-50 cursor-not-allowed"
-                                                                )}
-                                                            >
-                                                                <RadioGroupItem
-                                                                    value={value}
-                                                                    id={value}
-                                                                    disabled={disabled}
-                                                                    className="hidden"
-                                                                />
-                                                                {value} Min
-                                                            </label>
-                                                        )
-                                                    })}
-                                                </div>
-                                            </RadioGroup>
-                                        </FormControl>
-                                    </FormItem>
-                                )
-                            }}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="method"
-                            render={({ field }) => {
-                                return (
-                                    <FormItem>
-                                        <FormLabel>
-                                            Method
-                                        </FormLabel>
-                                        <FormControl>
-                                            <RadioGroup
-                                                onValueChange={field.onChange}
-                                                value={field.value}
-                                            >
-                                                <div className='flex gap-2'>
-                                                    {
-                                                        ["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS"].map((value) => {
+                            <h1 className='text-2xl font-semibold'>Create Monitor</h1>
+                            <p className="text-muted-foreground">
+                                Create a new monitor to track the availability of your website or API.
+                            </p>
+                        </div>
+                        <div className=' space-y-4'>
+
+                            <div className='grid grid-cols-2  items-start w-[50%] gap-2'>
+                                <FormField
+                                    control={form.control}
+                                    name='name'
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>
+                                                Name
+                                            </FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    {...field}
+                                                    placeholder='Enter monitor name'
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name='url'
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>
+                                                Url
+                                            </FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    {...field}
+                                                    placeholder='https://example.com'
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
+                            <FormField
+                                control={form.control}
+                                name="frequency"
+                                render={({ field }) => {
+                                    return (
+                                        <FormItem>
+                                            <FormLabel>
+                                                Frequency
+                                            </FormLabel>
+                                            <FormControl>
+                                                <RadioGroup
+                                                    onValueChange={field.onChange}
+                                                    value={field.value}
+                                                >
+                                                    <div className="flex gap-2">
+                                                        {['5', '10', '15'].map((value) => {
+                                                            const minutes = parseInt(value, 10)
+                                                            const disabled = minutes < limits.minFrequencyMinutes
+
                                                             return (
                                                                 <label
                                                                     key={value}
                                                                     htmlFor={value}
                                                                     className={cn(
-                                                                        "cursor-pointer px-8 rounded-md py-1 text-sm border hover:bg-secondary",
-                                                                        field.value === value && "bg-secondary text-secondary-foreground"
+                                                                        "cursor-pointer px-8 rounded-md hover:bg-accent py-1 text-sm border-2",
+                                                                        field.value === value && "bg-accent text-accent-foreground",
+                                                                        disabled && "opacity-50 cursor-not-allowed"
                                                                     )}
                                                                 >
                                                                     <RadioGroupItem
                                                                         value={value}
                                                                         id={value}
-                                                                        className='hidden'
+                                                                        disabled={disabled}
+                                                                        className="hidden"
                                                                     />
-                                                                    {value}
+                                                                    {value} Min
                                                                 </label>
                                                             )
-                                                        })
-                                                    }
-                                                </div>
-                                            </RadioGroup>
+                                                        })}
+                                                    </div>
+                                                </RadioGroup>
+                                            </FormControl>
+                                        </FormItem>
+                                    )
+                                }}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="method"
+                                render={({ field }) => {
+                                    return (
+                                        <FormItem>
+                                            <FormLabel>
+                                                Method
+                                            </FormLabel>
+                                            <FormControl>
+                                                <RadioGroup
+                                                    onValueChange={field.onChange}
+                                                    value={field.value}
+                                                >
+                                                    <div className='flex gap-2'>
+                                                        {
+                                                            ["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS"].map((value) => {
+                                                                return (
+                                                                    <label
+                                                                        key={value}
+                                                                        htmlFor={value}
+                                                                        className={cn(
+                                                                            "cursor-pointer px-8 rounded-md py-1 text-sm  border-2 hover:bg-accent",
+                                                                            field.value === value && "bg-accent text-accent-foreground "
+                                                                        )}
+                                                                    >
+                                                                        <RadioGroupItem
+                                                                            value={value}
+                                                                            id={value}
+                                                                            className='hidden'
+                                                                        />
+                                                                        {value}
+                                                                    </label>
+                                                                )
+                                                            })
+                                                        }
+                                                    </div>
+                                                </RadioGroup>
+                                            </FormControl>
+
+                                        </FormItem>
+                                    )
+                                }}
+                            />
+                            <FormField
+                                control={form.control}
+                                name='expectedStatus'
+                                render={({ field }) => (
+                                    <FormItem className=' w-[50%]'>
+                                        <FormLabel>
+                                            Expected status
+                                        </FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                {...field}
+                                                type='number'
+                                                onChange={(e) => {
+                                                    field.onChange(Number(e.target.value))
+                                                }}
+                                            />
                                         </FormControl>
-
+                                        <FormMessage />
                                     </FormItem>
-                                )
-                            }}
-                        />
-                        <FormField
-                            control={form.control}
-                            name='expectedStatus'
-                            render={({ field }) => (
-                                <FormItem className=' w-[50%]'>
-                                    <FormLabel>
-                                        Expected status
-                                    </FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            {...field}
-                                            type='number'
-                                            onChange={(e) => {
-                                                field.onChange(Number(e.target.value))
-                                            }}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name='body'
-                            render={({ field }) => (
-                                <FormItem className=' w-[50%]'>
-                                    <FormLabel>
-                                        Body
-                                    </FormLabel>
-                                    <FormControl>
-                                        <Textarea
-                                            placeholder='Enter body'
-                                            className=' resize-none h-auto'
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <div className="space-y-2 w-[50%]">
-                            <h3 className="text-sm font-medium text-white">Request Headers</h3>
-                            {fields.map((field, index) => (
-                                <div className="flex gap-2" key={field.id}>
-                                    <FormField
-                                        control={form.control}
-                                        name={`headers.${index}.key`}
-                                        render={({ field }) => (
-                                            <Input
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name='body'
+                                render={({ field }) => (
+                                    <FormItem className=' w-[50%]'>
+                                        <FormLabel>
+                                            Body
+                                        </FormLabel>
+                                        <FormControl>
+                                            <Textarea
+                                                placeholder='Enter body'
+                                                className=' resize-none h-auto'
                                                 {...field}
-                                                placeholder="Key"
-                                                className="w-1/2"
                                             />
-                                        )}
-                                    />
-                                    <FormField
-                                        control={form.control}
-                                        name={`headers.${index}.value`}
-                                        render={({ field }) => (
-                                            <Input
-                                                {...field}
-                                                placeholder="Value"
-                                                className="w-1/2 bg-zinc-900 text-white"
-                                            />
-                                        )}
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => remove(index)}
-                                        className="text-red-400 text-sm px-2"
-                                    >
-                                        ✕
-                                    </button>
-                                </div>
-                            ))}
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <div className="space-y-2 w-[50%]">
+                                <h3 className="text-sm font-medium ">Request Headers</h3>
+                                {fields.map((field, index) => (
+                                    <div className="flex gap-2" key={field.id}>
+                                        <FormField
+                                            control={form.control}
+                                            name={`headers.${index}.key`}
+                                            render={({ field }) => (
+                                                <Input
+                                                    {...field}
+                                                    placeholder="Key"
+                                                    className="w-1/2"
+                                                />
+                                            )}
+                                        />
+                                        <FormField
+                                            control={form.control}
+                                            name={`headers.${index}.value`}
+                                            render={({ field }) => (
+                                                <Input
+                                                    {...field}
+                                                    placeholder="Value"
+                                                    className="w-1/2 "
+                                                />
+                                            )}
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => remove(index)}
+                                            className="text-red-400 text-sm px-2 cursor-pointer"
+                                        >
+                                            ✕
+                                        </button>
+                                    </div>
+                                ))}
 
-                            <Button
-                                type="button"
-                                variant="ghost"
-                                onClick={() => append({ key: "", value: "" })}
-                                className="border text-muted-foreground hover:bg-zinc-800 mt-2"
-                            >
-                                Add new header
-                            </Button>
-                        </div>
-                        <div className='flex justify-start mt-10'>
-                            <Button type='submit' disabled={createMonitor.isPending}>
-                                Start Monitoring
-                            </Button>
+                                <Button
+                                    type="button"
+                                    variant="ghost"
+                                    onClick={() => append({ key: "", value: "" })}
+                                    className="border  mt-2"
+                                >
+                                    Add new header
+                                </Button>
+                            </div>
+                            <div className='flex justify-start mt-10'>
+                                <Button type='submit' disabled={createMonitor.isPending}>
+                                    Start Monitoring
+                                </Button>
+                            </div>
                         </div>
                     </form>
                 </Form>

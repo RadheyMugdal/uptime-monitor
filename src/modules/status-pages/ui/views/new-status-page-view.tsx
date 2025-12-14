@@ -36,14 +36,16 @@ export default function NewStatusPageView() {
                     </Breadcrumb>
                 </div>
             </header>
-            <div className="flex  flex-1 overflow-y-scroll flex-col gap-4 p-6 pt-2 ">
-                <div>
-                    <h1 className="text-2xl font-semibold ">Create Status Page</h1>
-                    <p className="text-muted-foreground">
-                        Set up a new public status page to showcase your monitors.
-                    </p>
+            <div className="flex  flex-1 overflow-y-scroll flex-col p-5  gap-8  pt-2 ">
+                <div className=" rounded-md ">
+                    <div>
+                        <h1 className="text-2xl font-semibold ">Create Status Page</h1>
+                        <p className="text-muted-foreground">
+                            Set up a new public status page to showcase your monitors.
+                        </p>
+                    </div>
+                    <CreateStatusPageForm monitors={monitors} />
                 </div>
-                <CreateStatusPageForm monitors={monitors} />
             </div>
         </>
     );

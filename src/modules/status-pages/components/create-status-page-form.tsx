@@ -58,7 +58,7 @@ export function CreateStatusPageForm({ monitors }: { monitors: Monitor[] }) {
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 bg-card/60 p-6  rounded-md">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8  py-6  rounded-md">
                 <div className="grid grid-cols-2 gap-8">
                     <FormField
                         control={form.control}
