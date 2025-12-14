@@ -75,6 +75,7 @@ const IntegrationsPage = () => {
                 {/* Main content */}
                 <div className="flex-1 p-4">
                     <ChannelIntegration
+                        key={selectedChannel}
                         type={selectedChannel}
                         existingIntegration={integrations?.find(i => i.type === selectedChannel)}
                     />
