@@ -5,9 +5,10 @@ import { polar, checkout, portal, usage, webhooks } from "@polar-sh/better-auth"
 import * as schema from "@/server/db/schema"
 import { polarClient } from "./polar";
 import { eq } from "drizzle-orm";
-
+import { lastLoginMethod } from "better-auth/plugins"
 export const auth = betterAuth({
     plugins: [
+        lastLoginMethod(),
         polar({
             client: polarClient,
             createCustomerOnSignUp: true,
