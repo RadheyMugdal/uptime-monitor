@@ -29,6 +29,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { PasswordInput } from "@/components/ui/password-input";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
+import { Badge } from "@/components/ui/badge";
 // 1. Define validation schema
 const formSchema = z.object({
     email: z.string().email("Invalid email address"),
@@ -42,6 +43,7 @@ export function LoginForm({
     className,
     ...props
 }: React.ComponentProps<"div">) {
+    const lastMethod = authClient.getLastUsedLoginMethod()
     const router = useRouter()
     const params = useSearchParams()
     const form = useForm<FormData>({
@@ -86,7 +88,7 @@ export function LoginForm({
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-6">
                             <div className="flex flex-col gap-4">
-                                <Button variant="outline" className="w-full" type="button"
+                                <Button variant="outline" className="w-full relative" type="button"
                                     onClick={async () => {
                                         await authClient.signIn.social({
                                             provider: "google",
@@ -97,8 +99,13 @@ export function LoginForm({
                                 >
                                     <FcGoogle />
                                     Login with Google
+                                    {
+                                        lastMethod === "google" && (
+                                            <Badge className=" ml-1 absolute -top-1 -right-1 text-[10px]"  >Last used</Badge>
+                                        )
+                                    }
                                 </Button>
-                                <Button variant="outline" className="w-full" type="button"
+                                <Button variant="outline" className="w-full relative" type="button"
                                     onClick={async () => {
                                         await authClient.signIn.social({
                                             provider: "github",
@@ -109,6 +116,11 @@ export function LoginForm({
                                 >
                                     <FaGithub />
                                     Login with Github
+                                    {
+                                        lastMethod === "github" && (
+                                            <Badge className=" ml-1 absolute -top-1 -right-1 text-[10px]"  >Last used</Badge>
+                                        )
+                                    }
                                 </Button>
                             </div>
 
@@ -155,7 +167,7 @@ export function LoginForm({
                                     )}
                                 />
 
-                                <Button type="submit" className="w-full">
+                                <Button type="submit" className="w-full relative">
                                     Login
                                 </Button>
                             </div>
