@@ -41,6 +41,15 @@ export const monitorRouter = createTRPCRouter({
         if (!createdMonitor) {
             throw new Error("Failed to create monitor.");
         }
+        await monitorQueue.add(
+            'check-monitor',
+            { monitorId: createdMonitor.id },
+            {
+              jobId: `monitor-now-${createdMonitor.id}`,
+              removeOnFail: true,
+              removeOnComplete: true,
+            }
+          );          
 
         await monitorQueue.add(
             'check-monitor',
