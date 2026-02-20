@@ -5,7 +5,7 @@ import { TRPCReactProvider } from "@/trpc/react";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Toaster } from "sonner";
 import { Nunito } from "next/font/google";
-
+import { Analytics } from "@vercel/analytics/next"
 export const metadata: Metadata = {
   title: "UptimeWatch - Never Miss a Downtime Again",
   description:
@@ -91,6 +91,7 @@ export default function RootLayout({
     >
       <meta name="apple-mobile-web-app-title" content="UptimeWatch" />
       <body>
+      <Analytics/>
         <NuqsAdapter>
           <TRPCReactProvider>{children}</TRPCReactProvider>
           <Toaster />
